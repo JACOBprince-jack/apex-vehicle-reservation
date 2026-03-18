@@ -1,0 +1,2665 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX | Premium Vehicle Reservation</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ══ THEME VARIABLES ═══════════════════════════════════════════════════════ */
+[data-theme="dark"]{
+  --bg:#070707;--bg2:#0f0f0f;--bg3:#161616;--bg4:#1e1e1e;--bg5:#272727;--bg6:#323232;
+  --text:#f0ece0;--text2:#b8b0a0;--text3:#7a7268;--text4:#4a4640;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+  --shadow:rgba(0,0,0,0.5);
+  --card-bg:#0f0f0f;--card-border:#1e1e1e;
+  --input-bg:#161616;--input-border:#2a2a2a;
+  --modal-bg:#0f0f0f;
+}
+[data-theme="light"]{
+  --bg:#f8f5ef;--bg2:#ffffff;--bg3:#f0ece4;--bg4:#e8e4dc;--bg5:#ddd8ce;--bg6:#ccc7bc;
+  --text:#1a1714;--text2:#4a4540;--text3:#8a8278;--text4:#c0bbb4;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+  --shadow:rgba(0,0,0,0.12);
+  --card-bg:#ffffff;--card-border:#e8e4dc;
+  --input-bg:#f0ece4;--input-border:#d8d2c8;
+  --modal-bg:#ffffff;
+}
+
+:root{
+  --gold:#c9a84c;--gold-l:#e8c96a;--gold-d:#8a6d2e;--gold-xs:rgba(201,168,76,0.08);
+  --green:#4ade80;--red:#f87171;--blue:#60a5fa;--amber:#fbbf24;--purple:#a78bfa;
+  --fd:'Bebas Neue',sans-serif;--fb:'Cormorant Garamond',serif;--fm:'DM Mono',monospace;
+  --radius:2px;
+  --transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);overflow-x:hidden;transition:background 0.3s,color 0.3s;min-height:100vh}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px}
+img{display:block;max-width:100%}
+button{cursor:pointer;font-family:var(--fm)}
+a{text-decoration:none;color:inherit}
+input,select,textarea{font-family:var(--fm)}
+
+/* ══ PAGES ═══════════════════════════════════════════════════════════════ */
+.page{display:none}
+.page.active{display:block}
+#page-auth.active{display:flex}
+#page-settings.active{display:flex}
+
+/* ══ NAV ══════════════════════════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  background:rgba(7,7,7,0.92);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(201,168,76,0.15);
+  transition:background 0.3s;
+}
+[data-theme="light"] nav{background:rgba(248,245,239,0.94)}
+.nav-logo{font-family:var(--fd);font-size:2rem;color:var(--gold);letter-spacing:.15em;cursor:pointer;line-height:1;flex-shrink:0}
+.nav-logo small{display:block;font-family:var(--fm);font-size:.48rem;letter-spacing:.4em;color:var(--text3);margin-top:-4px}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-link{font-family:var(--fm);font-size:.65rem;letter-spacing:.16em;color:var(--text3);cursor:pointer;transition:var(--transition);padding:4px 0;border-bottom:1px solid transparent}
+.nav-link:hover,.nav-link.active{color:var(--gold);border-bottom-color:var(--gold)}
+.nav-actions{display:flex;gap:10px;align-items:center;flex-shrink:0}
+.btn-ghost{font-family:var(--fm);font-size:.65rem;letter-spacing:.12em;padding:8px 18px;border:1px solid rgba(201,168,76,0.4);background:transparent;color:var(--gold);transition:var(--transition)}
+.btn-ghost:hover{background:var(--gold);color:#000}
+.btn-solid{font-family:var(--fm);font-size:.65rem;letter-spacing:.12em;padding:8px 18px;border:1px solid var(--gold);background:var(--gold);color:#000;transition:var(--transition)}
+.btn-solid:hover{background:var(--gold-l)}
+.nav-icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:.85rem;transition:var(--transition);position:relative}
+.nav-icon-btn:hover{border-color:var(--gold);color:var(--gold)}
+.nav-badge{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:var(--red);border-radius:50%;font-size:.45rem;font-family:var(--fm);color:#fff;display:flex;align-items:center;justify-content:center}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px}
+.hamburger span{width:22px;height:1.5px;background:var(--text);display:block;transition:var(--transition)}
+.mobile-nav{display:none;position:fixed;top:64px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border2);padding:20px;z-index:199;flex-direction:column;gap:4px}
+.mobile-nav.open{display:flex}
+.mobile-link{padding:12px 16px;font-family:var(--fm);font-size:.72rem;letter-spacing:.12em;color:var(--text2);border-bottom:1px solid var(--border);cursor:pointer;transition:color 0.2s}
+.mobile-link:hover{color:var(--gold)}
+
+/* ══ HERO ════════════════════════════════════════════════════════════════ */
+#hero{position:relative;height:100vh;overflow:hidden;display:flex;align-items:center;min-height:600px}
+.slideshow{position:absolute;inset:0;z-index:0}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
+.slide.active{opacity:1}
+.slide img{width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform 9s ease}
+.slide.active img{transform:scale(1)}
+.slide-overlay{position:absolute;inset:0;background:linear-gradient(110deg,rgba(7,7,7,.93) 0%,rgba(7,7,7,.6) 55%,rgba(7,7,7,.25) 100%)}
+.slide-bottom-fade{position:absolute;bottom:0;left:0;right:0;height:220px;background:linear-gradient(to top,var(--bg),transparent)}
+.hero-content{position:relative;z-index:5;padding:0 80px;max-width:680px}
+.hero-eyebrow{font-family:var(--fm);font-size:.62rem;letter-spacing:.5em;color:var(--gold);margin-bottom:18px;animation:fadeUp .9s .2s both}
+.hero-h1{font-family:var(--fd);font-size:clamp(4.5rem,10.5vw,9rem);line-height:.88;letter-spacing:.02em;color:#fff;animation:fadeUp .9s .4s both}
+.hero-h1 em{color:var(--gold);font-style:normal;display:block}
+.hero-sub{font-size:1.08rem;color:rgba(255,255,255,0.55);font-style:italic;margin:24px 0 36px;max-width:420px;line-height:1.75;animation:fadeUp .9s .6s both}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .9s .8s both}
+.hbtn-p{font-family:var(--fm);font-size:.7rem;letter-spacing:.14em;padding:14px 34px;background:var(--gold);color:#000;border:none;transition:var(--transition)}
+.hbtn-p:hover{background:var(--gold-l);transform:translateY(-2px)}
+.hbtn-s{font-family:var(--fm);font-size:.7rem;letter-spacing:.14em;padding:14px 34px;background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3);transition:var(--transition)}
+.hbtn-s:hover{border-color:var(--gold);color:var(--gold)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* Slide controls */
+.slide-dots{position:absolute;bottom:90px;right:48px;z-index:10;display:flex;flex-direction:column;gap:7px}
+.sdot{width:2px;height:20px;background:rgba(201,168,76,.25);cursor:pointer;transition:all .4s}
+.sdot.active{background:var(--gold);height:36px}
+.slide-num{position:absolute;bottom:90px;left:80px;z-index:10;font-family:var(--fd);font-size:4rem;color:rgba(201,168,76,.2);line-height:1}
+.slide-label{position:absolute;right:80px;top:50%;transform:translateY(-50%);z-index:10;text-align:right;transition:opacity .5s}
+.slide-label.fade{opacity:0}
+.sl-make{font-family:var(--fm);font-size:.55rem;letter-spacing:.35em;color:var(--gold)}
+.sl-model{font-family:var(--fd);font-size:2.2rem;color:#fff;line-height:1;margin:4px 0}
+.sl-cat{font-family:var(--fm);font-size:.58rem;color:rgba(255,255,255,.4)}
+.scroll-cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--fm);font-size:.55rem;letter-spacing:.3em;color:rgba(255,255,255,.3)}
+.sc-line{width:1px;height:44px;background:linear-gradient(var(--gold),transparent);animation:scPulse 2s infinite}
+@keyframes scPulse{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ══ MARQUEE ══════════════════════════════════════════════════════════════ */
+.marquee-bar{background:var(--bg2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);overflow:hidden;padding:0}
+.marquee-track{display:flex;animation:marquee 25s linear infinite;width:max-content}
+.marquee-item{padding:16px 44px;font-family:var(--fd);font-size:1rem;letter-spacing:.14em;color:var(--text3);border-right:1px solid var(--border);white-space:nowrap;flex-shrink:0;transition:color .2s}
+.marquee-item:hover{color:var(--gold)}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ══ SECTIONS ═════════════════════════════════════════════════════════════ */
+.section{padding:90px 80px}
+.sec-eye{font-family:var(--fm);font-size:.58rem;letter-spacing:.4em;color:var(--gold);margin-bottom:10px}
+.sec-title{font-family:var(--fd);font-size:clamp(2.2rem,4.5vw,3.8rem);letter-spacing:.04em;margin-bottom:6px}
+.sec-sub{font-style:italic;color:var(--text3);font-size:.95rem;margin-bottom:52px}
+
+/* Fleet preview grid */
+.fleet-preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.fp-card{position:relative;overflow:hidden;aspect-ratio:16/10;cursor:pointer}
+.fp-card img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease;filter:brightness(.65)}
+.fp-card:hover img{transform:scale(1.07);filter:brightness(.45)}
+.fp-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:22px}
+.fp-tag{font-family:var(--fm);font-size:.52rem;letter-spacing:.22em;color:var(--gold);margin-bottom:5px}
+.fp-name{font-family:var(--fd);font-size:1.5rem;letter-spacing:.03em;color:#fff}
+.fp-price{font-family:var(--fm);font-size:.62rem;color:rgba(255,255,255,.5);margin-top:3px}
+.fp-hover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.fp-card:hover .fp-hover{opacity:1}
+.fp-hover-btn{font-family:var(--fm);font-size:.65rem;letter-spacing:.14em;padding:11px 26px;background:var(--gold);color:#000;border:none;transition:transform .2s}
+.fp-hover-btn:hover{transform:scale(1.04)}
+
+/* Steps */
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.step-card{padding:36px 28px;border:1px solid var(--border2);transition:border-color .3s;background:var(--bg2)}
+.step-card:hover{border-color:rgba(201,168,76,.35)}
+.step-num{font-family:var(--fd);font-size:4.5rem;color:var(--border2);line-height:1;margin-bottom:14px;transition:color .3s}
+.step-card:hover .step-num{color:rgba(201,168,76,.12)}
+.step-icon{font-size:1.4rem;margin-bottom:10px}
+.step-title{font-family:var(--fd);font-size:1.3rem;letter-spacing:.04em;margin-bottom:8px}
+.step-desc{font-size:.88rem;color:var(--text3);line-height:1.65}
+
+/* ══ VEHICLES PAGE ════════════════════════════════════════════════════════ */
+#page-vehicles{padding-top:64px}
+.vpage-header{padding:52px 80px 28px;border-bottom:1px solid var(--border2);background:var(--bg2)}
+.vpage-title{font-family:var(--fd);font-size:3.2rem;letter-spacing:.04em}
+.vpage-title span{color:var(--gold)}
+.vpage-sub{color:var(--text3);font-style:italic;margin-top:6px;font-size:.92rem}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;align-items:center}
+.filter-sep{width:1px;height:28px;background:var(--border2);margin:0 4px}
+.flbl{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(--text3);align-self:center}
+.fb{font-family:var(--fm);font-size:.6rem;letter-spacing:.1em;padding:7px 16px;border:1px solid var(--border2);background:transparent;color:var(--text3);transition:var(--transition)}
+.fb:hover,.fb.on{border-color:var(--gold);color:var(--gold);background:var(--gold-xs)}
+.v-search{background:var(--input-bg);border:1px solid var(--input-border);color:var(--text);font-family:var(--fm);font-size:.68rem;padding:7px 14px;width:220px;transition:border-color .2s;margin-left:auto}
+.v-search:focus{outline:none;border-color:var(--gold)}
+.v-search::placeholder{color:var(--text3)}
+
+/* Vehicle grid */
+#vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px;padding:2px}
+.vc{background:var(--card-bg);border:1px solid var(--card-border);overflow:hidden;cursor:pointer;transition:var(--transition);position:relative}
+.vc:hover{border-color:rgba(201,168,76,.45);transform:translateY(-3px);box-shadow:0 16px 48px var(--shadow)}
+.vc.unavail{opacity:.52;cursor:not-allowed}
+.vc.unavail:hover{transform:none;border-color:var(--card-border)}
+.vc-img{height:190px;overflow:hidden;position:relative}
+.vc-img img{width:100%;height:100%;object-fit:cover;transition:transform .55s}
+.vc:hover .vc-img img{transform:scale(1.06)}
+.vc-badge{position:absolute;top:10px;left:10px;font-family:var(--fm);font-size:.5rem;letter-spacing:.18em;padding:3px 8px}
+.vc-badge.car{color:var(--gold);background:rgba(7,7,7,.8);border:1px solid rgba(201,168,76,.35)}
+.vc-badge.moto{color:var(--blue);background:rgba(7,7,7,.8);border:1px solid rgba(96,165,250,.35)}
+.vc-maint{position:absolute;top:10px;right:10px;font-family:var(--fm);font-size:.5rem;letter-spacing:.1em;padding:3px 8px;background:rgba(248,113,113,.2);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.vc-fav{position:absolute;bottom:10px;right:10px;background:rgba(7,7,7,.7);border:none;color:#fff;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.75rem;transition:var(--transition);cursor:pointer}
+.vc-fav:hover,.vc-fav.on{color:var(--red)}
+.vc-body{padding:18px}
+.vc-make{font-family:var(--fm);font-size:.55rem;letter-spacing:.22em;color:var(--gold);margin-bottom:3px}
+.vc-model{font-family:var(--fd);font-size:1.55rem;letter-spacing:.02em;line-height:1.05;margin-bottom:1px}
+.vc-year{font-family:var(--fm);font-size:.56rem;color:var(--text3);margin-bottom:12px}
+.vc-specs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:15px}
+.vc-spec{font-family:var(--fm);font-size:.54rem;color:var(--text3);background:var(--bg4);padding:3px 7px;border:1px solid var(--border)}
+.vc-pricing{display:grid;grid-template-columns:1fr 1px 1fr;border:1px solid var(--border2);margin-bottom:14px}
+.vp{padding:10px;text-align:center}
+.vp-div{background:var(--border2)}
+.vp-lbl{display:block;font-family:var(--fm);font-size:.5rem;letter-spacing:.1em;color:var(--text3);margin-bottom:3px}
+.vp-val{font-family:var(--fd);font-size:1.3rem;color:var(--gold)}
+.vc-btn{width:100%;padding:11px;background:var(--gold);color:#000;border:none;font-family:var(--fm);font-size:.65rem;letter-spacing:.14em;transition:background .2s}
+.vc-btn:hover{background:var(--gold-l)}
+.vc-unavail{width:100%;padding:11px;text-align:center;font-family:var(--fm);font-size:.6rem;letter-spacing:.1em;color:var(--text3);border:1px solid var(--border2);background:var(--bg3)}
+.v-empty{padding:80px;text-align:center;color:var(--text3);font-style:italic;grid-column:1/-1}
+
+/* ══ AUTH PAGE ════════════════════════════════════════════════════════════ */
+#page-auth{align-items:center;justify-content:center;min-height:100vh;background:var(--bg);padding:80px 20px 20px;position:relative;overflow:hidden}
+#page-auth::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(201,168,76,.06),transparent 60%);pointer-events:none}
+.auth-wrap{width:100%;max-width:420px;position:relative;z-index:2}
+.auth-logo{font-family:var(--fd);font-size:3.2rem;color:var(--gold);text-align:center;letter-spacing:.12em}
+.auth-tag{text-align:center;font-style:italic;color:var(--text3);margin-bottom:36px;font-size:.9rem}
+.auth-card{background:var(--card-bg);border:1px solid var(--border2);padding:32px}
+.auth-tabs{display:flex;border-bottom:1px solid var(--border2);margin-bottom:24px}
+.atab{flex:1;padding:11px;background:none;border:none;border-bottom:2px solid transparent;font-family:var(--fm);font-size:.65rem;letter-spacing:.12em;color:var(--text3);transition:all .2s}
+.atab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.aff{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.aff label{font-family:var(--fm);font-size:.57rem;letter-spacing:.14em;color:var(--text3)}
+.aff input{background:var(--input-bg);border:1px solid var(--input-border);color:var(--text);padding:11px 13px;font-size:.82rem;width:100%;transition:border-color .2s}
+.aff input:focus{outline:none;border-color:var(--gold)}
+.auth-btn{width:100%;padding:13px;background:var(--gold);color:#000;border:none;font-family:var(--fm);font-size:.7rem;letter-spacing:.14em;margin-top:6px;transition:background .2s}
+.auth-btn:hover{background:var(--gold-l)}
+.auth-demo{font-family:var(--fm);font-size:.58rem;color:var(--text3);text-align:center;margin-top:14px;padding:10px;background:var(--bg3);border:1px solid var(--border);line-height:1.8}
+.auth-demo b{color:var(--gold)}
+
+/* ══ SETTINGS PAGE ════════════════════════════════════════════════════════ */
+#page-settings{min-height:100vh;padding-top:64px;background:var(--bg);align-items:flex-start;justify-content:center}
+.settings-wrap{width:100%;max-width:900px;padding:40px 20px}
+.settings-header{margin-bottom:36px}
+.settings-title{font-family:var(--fd);font-size:3rem;letter-spacing:.04em}
+.settings-title span{color:var(--gold)}
+.settings-grid{display:grid;grid-template-columns:220px 1fr;gap:0;border:1px solid var(--border2);background:var(--card-bg)}
+.settings-sidebar{border-right:1px solid var(--border2);padding:8px 0}
+.st-link{display:flex;align-items:center;gap:10px;padding:12px 20px;font-family:var(--fm);font-size:.62rem;letter-spacing:.1em;color:var(--text3);cursor:pointer;border-left:2px solid transparent;transition:all .2s}
+.st-link:hover{color:var(--text);background:var(--bg3)}
+.st-link.on{color:var(--gold);border-left-color:var(--gold);background:var(--gold-xs)}
+.st-icon{font-size:.88rem;width:18px;text-align:center}
+.settings-main{padding:28px 32px}
+
+/* Settings panels */
+.st-panel{display:none}
+.st-panel.active{display:block}
+.st-section-title{font-family:var(--fd);font-size:1.8rem;letter-spacing:.04em;margin-bottom:4px}
+.st-section-sub{font-style:italic;color:var(--text3);font-size:.88rem;margin-bottom:24px}
+.st-group{margin-bottom:28px}
+.st-group-title{font-family:var(--fm);font-size:.58rem;letter-spacing:.22em;color:var(--gold);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.st-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.st-row:last-child{border-bottom:none}
+.st-row-left{flex:1}
+.st-row-label{font-family:var(--fm);font-size:.65rem;letter-spacing:.1em;color:var(--text);margin-bottom:3px}
+.st-row-desc{font-size:.8rem;color:var(--text3)}
+/* Toggle */
+.toggle{width:44px;height:24px;background:var(--bg5);border-radius:12px;position:relative;cursor:pointer;transition:background .25s;flex-shrink:0;border:none}
+.toggle.on{background:var(--gold)}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .25s}
+.toggle.on::after{transform:translateX(20px)}
+/* Theme cards */
+.theme-cards{display:flex;gap:12px;margin-top:8px}
+.theme-card{border:2px solid var(--border2);padding:16px 20px;cursor:pointer;transition:all .2s;text-align:center;flex:1}
+.theme-card.active{border-color:var(--gold);background:var(--gold-xs)}
+.theme-card-icon{font-size:1.5rem;margin-bottom:8px}
+.theme-card-name{font-family:var(--fm);font-size:.62rem;letter-spacing:.1em;color:var(--text3)}
+.theme-card.active .theme-card-name{color:var(--gold)}
+/* Profile form */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.pf{display:flex;flex-direction:column;gap:5px}
+.pf label{font-family:var(--fm);font-size:.57rem;letter-spacing:.14em;color:var(--text3)}
+.pf input,.pf select{background:var(--input-bg);border:1px solid var(--input-border);color:var(--text);padding:10px 12px;font-size:.82rem;width:100%;transition:border-color .2s}
+.pf input:focus,.pf select:focus{outline:none;border-color:var(--gold)}
+.profile-avatar{width:72px;height:72px;background:var(--bg4);border:2px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin-bottom:16px;position:relative;cursor:pointer}
+.profile-avatar:hover{border-color:var(--gold)}
+.profile-avatar-edit{position:absolute;bottom:0;right:0;width:22px;height:22px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#000}
+/* Bookings list in settings */
+.my-bookings-list{display:flex;flex-direction:column;gap:10px}
+.mb-card{background:var(--bg3);border:1px solid var(--border2);border-left:3px solid var(--border2);padding:16px;transition:border-color .2s}
+.mb-card.pending{border-left-color:var(--amber)}
+.mb-card.approved{border-left-color:var(--green)}
+.mb-card.rejected{border-left-color:var(--red)}
+.mb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.mb-id{font-family:var(--fm);font-size:.65rem;color:var(--gold)}
+.mb-status{font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;padding:3px 8px}
+.mb-status.pending{background:rgba(251,191,36,.12);color:var(--amber)}
+.mb-status.approved{background:rgba(74,222,128,.12);color:var(--green)}
+.mb-status.rejected{background:rgba(248,113,113,.1);color:var(--red)}
+.mb-vehicle{font-family:var(--fd);font-size:1.2rem;letter-spacing:.02em;margin-bottom:4px}
+.mb-meta{font-family:var(--fm);font-size:.6rem;color:var(--text3)}
+.mb-approved-note{font-family:var(--fm);font-size:.58rem;color:var(--green);margin-top:8px;padding:6px 10px;background:rgba(74,222,128,.08);border-left:2px solid var(--green)}
+.mb-rejected-note{font-family:var(--fm);font-size:.58rem;color:var(--red);margin-top:8px;padding:6px 10px;background:rgba(248,113,113,.08);border-left:2px solid var(--red)}
+/* Reminders */
+.reminder-list{display:flex;flex-direction:column;gap:8px}
+.rem-card{background:var(--bg3);border:1px solid var(--border2);padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.rem-icon{font-size:1.1rem;flex-shrink:0;margin-top:2px}
+.rem-title{font-family:var(--fm);font-size:.65rem;letter-spacing:.08em;color:var(--text);margin-bottom:3px}
+.rem-desc{font-size:.82rem;color:var(--text3)}
+.rem-time{font-family:var(--fm);font-size:.55rem;color:var(--gold);margin-left:auto;flex-shrink:0}
+.rem-dismiss{background:none;border:none;color:var(--text3);font-size:.7rem;margin-left:8px;transition:color .2s}
+.rem-dismiss:hover{color:var(--red)}
+.add-reminder-form{background:var(--bg3);border:1px solid var(--border2);padding:18px;margin-top:14px}
+
+/* Notifications */
+.notif-card{background:var(--bg3);border:1px solid var(--border2);padding:14px 16px;display:flex;gap:12px;margin-bottom:8px;transition:background .2s}
+.notif-card.unread{background:rgba(201,168,76,.05);border-color:rgba(201,168,76,.2)}
+.notif-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;flex-shrink:0;margin-top:4px}
+.notif-dot.read{background:var(--bg5)}
+.notif-text{font-size:.9rem;color:var(--text);margin-bottom:3px}
+.notif-time{font-family:var(--fm);font-size:.55rem;color:var(--text3)}
+
+/* Save btn */
+.save-btn{font-family:var(--fm);font-size:.7rem;letter-spacing:.14em;padding:11px 28px;background:var(--gold);color:#000;border:none;transition:background .2s;margin-top:20px}
+.save-btn:hover{background:var(--gold-l)}
+.danger-btn{font-family:var(--fm);font-size:.7rem;letter-spacing:.14em;padding:11px 28px;background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3);transition:all .2s;margin-top:8px}
+.danger-btn:hover{background:rgba(248,113,113,.22)}
+
+/* ══ BOOKING MODAL ════════════════════════════════════════════════════════ */
+#modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+#modal-overlay.open{display:flex}
+.modal-box{background:var(--modal-bg);border:1px solid rgba(201,168,76,.25);width:100%;max-width:660px;margin:auto;position:relative}
+.modal-x{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text3);font-size:1.1rem;z-index:10;width:30px;height:30px;display:flex;align-items:center;justify-content:center;transition:color .2s}
+.modal-x:hover{color:var(--gold)}
+.modal-head{padding:22px 26px 18px;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center}
+.mvname{font-family:var(--fd);font-size:1.75rem;letter-spacing:.03em}
+.mvname span{color:var(--gold)}
+.steps-row{display:flex;align-items:center;gap:5px}
+.si{width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);font-family:var(--fm);font-size:.6rem;display:flex;align-items:center;justify-content:center;color:var(--text3)}
+.si.on{border-color:var(--gold);color:var(--gold)}
+.si.done{background:var(--gold);border-color:var(--gold);color:#000}
+.sil{width:24px;height:1px;background:var(--border2)}
+.sil.done{background:var(--gold)}
+.modal-body{padding:22px 26px}
+.modal-foot{padding:14px 26px 22px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;gap:10px}
+.mlbl{font-family:var(--fm);font-size:.56rem;letter-spacing:.2em;color:var(--text3);margin-bottom:10px}
+/* booking type */
+.btype-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btype{border:1px solid var(--border2);padding:18px;cursor:pointer;text-align:center;transition:all .25s;background:var(--bg3)}
+.btype:hover,.btype.on{border-color:var(--gold);background:var(--gold-xs)}
+.btype-icon{font-size:1.6rem;margin-bottom:7px}
+.btype-name{font-family:var(--fd);font-size:1.1rem;letter-spacing:.04em}
+.btype-desc{font-size:.75rem;color:var(--text3);margin:3px 0}
+.btype-price{font-family:var(--fm);font-size:.65rem;color:var(--gold);margin-top:7px}
+/* calendar */
+.cal{background:var(--bg3);border:1px solid var(--border2)}
+.cal-hd{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border2)}
+.cal-hd button{background:none;border:none;color:var(--gold);font-size:1rem;padding:0 6px;transition:opacity .2s}
+.cal-hd button:hover{opacity:.6}
+.cal-hd span{font-family:var(--fm);font-size:.7rem;letter-spacing:.1em}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;padding:7px 0}
+.cal-dow span{font-family:var(--fm);font-size:.56rem;color:var(--text3)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:6px}
+.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:.66rem;border-radius:2px;transition:all .18s}
+.cday.ok{cursor:pointer;color:var(--text)}
+.cday.ok:hover{background:rgba(201,168,76,.18);color:var(--gold)}
+.cday.sel{background:var(--gold)!important;color:#000!important}
+.cday.past{color:var(--bg5);cursor:not-allowed}
+/* slots */
+.slots-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:7px}
+.slot{padding:9px 4px;border:1px solid var(--border2);background:var(--bg3);font-family:var(--fm);font-size:.6rem;cursor:pointer;text-align:center;transition:all .18s;line-height:1.3}
+.slot:hover{border-color:var(--gold)}
+.slot.on{background:var(--gold);border-color:var(--gold);color:#000}
+.slot.taken{opacity:.3;cursor:not-allowed}
+/* dur */
+.dur-row{display:flex;gap:10px;margin-bottom:14px}
+.dbtn{flex:1;padding:9px;border:1px solid var(--border2);background:var(--bg3);color:var(--text3);font-family:var(--fm);font-size:.62rem;letter-spacing:.08em;transition:all .18s}
+.dbtn.on{border-color:var(--gold);color:var(--gold)}
+.days-row{display:flex;gap:12px;align-items:center}
+.days-row label{font-family:var(--fm);font-size:.58rem;color:var(--text3)}
+.days-inp{background:var(--input-bg);border:1px solid var(--input-border);color:var(--text);font-family:var(--fm);padding:7px;width:72px;text-align:center}
+.price-live{font-family:var(--fd);font-size:1.35rem;color:var(--gold)}
+.disc-tag{font-family:var(--fm);font-size:.55rem;color:var(--green);background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);padding:3px 8px}
+/* upload */
+.upload-zone{border:2px dashed var(--border2);padding:32px 18px;text-align:center;cursor:pointer;transition:all .25s}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--gold);background:var(--gold-xs)}
+.uz-icon{font-size:2rem;margin-bottom:8px}
+.uz-ttl{font-family:var(--fm);font-size:.7rem;letter-spacing:.1em;margin-bottom:4px}
+.uz-sub{font-size:.76rem;color:var(--text3)}
+.up-prev{margin-top:10px;display:flex;gap:10px;align-items:center;padding:12px;background:var(--bg3);border:1px solid var(--border2)}
+.up-info{flex:1}
+.up-name{font-family:var(--fm);font-size:.68rem}
+.up-size{font-size:.72rem;color:var(--text3);margin-top:2px}
+.up-clr{background:none;border:none;color:var(--red);font-size:.9rem;margin-left:auto}
+/* form */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ff{display:flex;flex-direction:column;gap:4px}
+.ff label{font-family:var(--fm);font-size:.56rem;letter-spacing:.14em;color:var(--text3)}
+.ff input,.ff select{background:var(--input-bg);border:1px solid var(--input-border);color:var(--text);padding:9px 11px;font-size:.8rem;width:100%;transition:border-color .2s}
+.ff input:focus,.ff select:focus{outline:none;border-color:var(--gold)}
+/* summary */
+.summ-card{background:var(--bg3);border:1px solid var(--border2)}
+.srow{display:flex;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--border);font-size:.88rem}
+.srow:last-child{border-bottom:none}
+.srow span{color:var(--text3)}
+.srow.tot{background:var(--gold-xs)}
+.srow.tot strong{color:var(--gold);font-size:1.05rem}
+.notice{background:var(--gold-xs);border:1px solid rgba(201,168,76,.2);padding:11px 14px;font-size:.8rem;color:var(--text3);margin-top:14px;line-height:1.55}
+/* success */
+.success-wrap{padding:36px 26px;text-align:center}
+.succ-star{font-size:2.8rem;color:var(--gold);animation:pulse 1.2s ease infinite alternate;display:block;margin-bottom:14px}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.22)}}
+.succ-ttl{font-family:var(--fd);font-size:2.6rem;letter-spacing:.04em;margin-bottom:20px}
+.bid-box{background:var(--bg3);border:1px solid var(--gold);padding:18px;margin-bottom:18px}
+.bid-lbl{font-family:var(--fm);font-size:.55rem;letter-spacing:.28em;color:var(--text3);margin-bottom:5px}
+.bid-val{font-family:var(--fd);font-size:2.6rem;color:var(--gold);letter-spacing:.08em}
+.bid-copy{font-family:var(--fm);font-size:.58rem;color:var(--text3);cursor:pointer;margin-top:7px;transition:color .2s}
+.bid-copy:hover{color:var(--gold)}
+.succ-details{display:flex;flex-direction:column;gap:6px;text-align:left;margin-bottom:12px}
+.sd{font-family:var(--fm);font-size:.62rem;color:var(--text3)}
+
+/* ══ SHARED BUTTONS ═══════════════════════════════════════════════════════ */
+.btn-p{background:var(--gold);color:#000;border:none;font-family:var(--fm);font-size:.66rem;letter-spacing:.12em;padding:11px 22px;transition:background .2s;cursor:pointer}
+.btn-p:hover{background:var(--gold-l)}
+.btn-p:disabled{opacity:.42;cursor:not-allowed}
+.btn-s{background:transparent;color:var(--text3);border:1px solid var(--border2);font-family:var(--fm);font-size:.66rem;letter-spacing:.12em;padding:11px 22px;transition:all .2s;cursor:pointer}
+.btn-s:hover{border-color:var(--text3);color:var(--text)}
+
+/* ══ TOAST ════════════════════════════════════════════════════════════════ */
+#toast{position:fixed;bottom:26px;right:26px;z-index:9999;font-family:var(--fm);font-size:.66rem;letter-spacing:.08em;padding:12px 20px;transform:translateY(55px);opacity:0;transition:all .35s;pointer-events:none;max-width:300px}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.s{background:rgba(74,222,128,.95);color:#000}
+#toast.e{background:rgba(248,113,113,.95);color:#000}
+#toast.i{background:rgba(201,168,76,.95);color:#000}
+
+/* ══ FOOTER ═══════════════════════════════════════════════════════════════ */
+footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80px 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:36px}
+.ft-logo{font-family:var(--fd);font-size:2.2rem;color:var(--gold);letter-spacing:.12em;margin-bottom:8px}
+.ft-desc{font-size:.86rem;color:var(--text3);line-height:1.75;max-width:220px}
+.ft-col-hd{font-family:var(--fm);font-size:.55rem;letter-spacing:.28em;color:var(--gold);margin-bottom:14px}
+.ft-lnk{display:block;font-size:.86rem;color:var(--text3);margin-bottom:8px;cursor:pointer;transition:color .2s}
+.ft-lnk:hover{color:var(--gold)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.ft-copy{font-family:var(--fm);font-size:.55rem;letter-spacing:.1em;color:var(--text3)}
+.ft-admin{font-family:var(--fm);font-size:.58rem;letter-spacing:.12em;color:var(--gold-d);cursor:pointer;transition:color .2s;padding:6px 14px;border:1px solid var(--border2)}
+.ft-admin:hover{color:var(--gold);border-color:rgba(201,168,76,.3)}
+
+/* ══ RESPONSIVE ═══════════════════════════════════════════════════════════ */
+@media(max-width:1100px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  nav{padding:0 24px}
+  .section{padding:70px 40px}
+  .hero-content{padding:0 40px}
+  .slide-label{right:40px}
+  .fleet-preview-grid{grid-template-columns:repeat(2,1fr)}
+  .steps-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  footer{padding:40px}
+  .vpage-header{padding:40px 24px 20px}
+  .settings-grid{grid-template-columns:1fr}
+  .settings-sidebar{border-right:none;border-bottom:1px solid var(--border2);display:flex;flex-wrap:wrap;padding:8px}
+  .st-link{padding:10px 16px}
+}
+@media(max-width:700px){
+  .hero-content{padding:0 22px}
+  .hero-h1{font-size:clamp(3.5rem,15vw,5rem)}
+  .slide-label{display:none}
+  .slide-dots{right:18px;bottom:80px}
+  .slide-num{left:22px;bottom:80px;font-size:3rem}
+  .section{padding:54px 20px}
+  .fleet-preview-grid{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:1fr}
+  .btype-grid{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr}
+  .slots-grid{grid-template-columns:repeat(4,1fr)}
+  .modal-box{margin:0}
+  .modal-head,.modal-body,.modal-foot{padding:14px 16px}
+  footer{padding:30px 20px}
+  .footer-grid{grid-template-columns:1fr;gap:24px}
+  .footer-bottom{flex-direction:column;text-align:center}
+  #vgrid{grid-template-columns:1fr}
+  .filter-row{gap:6px}
+  .v-search{width:100%;margin-left:0;margin-top:8px}
+  .profile-grid{grid-template-columns:1fr}
+  .auth-card{padding:24px 18px}
+  .settings-wrap{padding:24px 16px}
+  .about-split{grid-template-columns:1fr!important}
+  .about-stats{grid-template-columns:repeat(2,1fr)!important}
+  .reviews-grid{grid-template-columns:1fr!important}
+  .pickup-steps{grid-template-columns:1fr!important}
+  .pickup-info-grid{grid-template-columns:1fr!important}
+  .locations-grid{grid-template-columns:1fr!important}
+  .map-section{flex-direction:column!important}
+  .map-sidebar{width:100%!important;max-height:320px}
+  #apex-map{min-height:340px!important}
+  .team-grid{grid-template-columns:1fr!important}
+  .values-grid{grid-template-columns:1fr!important}
+}
+
+/* ══ ABOUT US ════════════════════════════════════════════════════════════ */
+.about-split{display:grid;grid-template-columns:1fr 1.08fr;gap:0;min-height:520px}
+.about-img-col{position:relative;overflow:hidden}
+.about-img-col img{width:100%;height:100%;object-fit:cover;filter:brightness(.72)}
+.about-img-overlay{position:absolute;inset:0;background:linear-gradient(to right,transparent 55%,var(--bg))}
+.about-img-badge{position:absolute;bottom:36px;left:36px;background:var(--gold);color:#000;padding:14px 22px;font-family:var(--fd);font-size:1rem;letter-spacing:.08em}
+.about-content-col{padding:64px 80px;display:flex;flex-direction:column;justify-content:center;background:var(--bg)}
+.about-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border2);margin-top:32px}
+.about-stat{padding:20px 14px;text-align:center;border-right:1px solid var(--border2)}
+.about-stat:last-child{border-right:none}
+.astat-num{font-family:var(--fd);font-size:2.6rem;color:var(--gold);line-height:1}
+.astat-lbl{font-family:var(--fm);font-size:.52rem;letter-spacing:.18em;color:var(--text3);margin-top:4px}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:52px}
+.team-card{position:relative;overflow:hidden;aspect-ratio:3/4}
+.team-card img{width:100%;height:100%;object-fit:cover;filter:brightness(.7) grayscale(.3);transition:all .5s}
+.team-card:hover img{filter:brightness(.52) grayscale(0);transform:scale(1.05)}
+.team-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:22px}
+.team-name{font-family:var(--fd);font-size:1.4rem;letter-spacing:.04em;color:#fff}
+.team-role{font-family:var(--fm);font-size:.55rem;letter-spacing:.2em;color:var(--gold);margin-top:4px}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.val-card{padding:22px;background:var(--bg2);border:1px solid var(--border2);transition:border-color .3s}
+.val-card:hover{border-color:rgba(201,168,76,.4)}
+.val-icon{font-size:1.4rem;margin-bottom:9px}
+.val-title{font-family:var(--fd);font-size:1.1rem;letter-spacing:.04em;margin-bottom:5px}
+.val-desc{font-size:.84rem;color:var(--text3);line-height:1.65}
+
+/* ══ REVIEWS ═════════════════════════════════════════════════════════════ */
+.rating-overview{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;background:var(--bg2);border:1px solid var(--border2);padding:32px;margin-bottom:32px}
+.ro-score{text-align:center}
+.ro-num{font-family:var(--fd);font-size:5rem;color:var(--gold);line-height:1}
+.ro-stars{display:flex;gap:4px;justify-content:center;margin:6px 0}
+.ro-count{font-family:var(--fm);font-size:.58rem;color:var(--text3);letter-spacing:.1em}
+.ro-bars{flex:1}
+.rating-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:5px}
+.rb-lbl{font-family:var(--fm);font-size:.58rem;color:var(--text3);width:12px;flex-shrink:0;text-align:right}
+.rb-track{flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.rb-fill{height:100%;background:var(--gold);border-radius:3px}
+.rb-count{font-family:var(--fm);font-size:.56rem;color:var(--text3);width:28px}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:24px}
+.review-card{background:var(--bg2);border:1px solid var(--border2);padding:26px;transition:border-color .3s;position:relative;overflow:hidden}
+.review-card:hover{border-color:rgba(201,168,76,.35)}
+.rv-quote{font-family:var(--fd);font-size:4rem;color:rgba(201,168,76,.08);position:absolute;top:8px;left:16px;line-height:1;pointer-events:none}
+.rv-stars{display:flex;gap:3px;margin-bottom:12px}
+.rv-star{font-size:.7rem;color:var(--gold)}
+.rv-star.empty{color:var(--border2)}
+.rv-text{font-size:.92rem;color:var(--text2);line-height:1.78;font-style:italic;margin-bottom:16px;position:relative;z-index:1}
+.rv-author{display:flex;align-items:center;gap:10px}
+.rv-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--border2);flex-shrink:0}
+.rv-name{font-family:var(--fd);font-size:1.05rem;letter-spacing:.03em}
+.rv-vehicle{font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;color:var(--gold);margin-top:2px}
+.rv-date{font-family:var(--fm);font-size:.5rem;color:var(--text3);margin-top:1px}
+.rv-verified{font-family:var(--fm);font-size:.5rem;color:var(--green);margin-top:2px}
+.write-review-box{background:var(--bg2);border:1px solid var(--border2);padding:28px;margin-top:4px}
+.star-pick{display:flex;gap:6px;margin:10px 0}
+.sp-star{font-size:1.5rem;cursor:pointer;color:var(--bg5);transition:color .12s}
+.sp-star.lit,.sp-star:hover{color:var(--gold)}
+
+/* ══ PICKUP PROCESS ══════════════════════════════════════════════════════ */
+.pickup-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-bottom:32px}
+.pickup-steps::before{content:"";position:absolute;top:36px;left:12%;right:12%;height:1px;background:linear-gradient(to right,var(--gold),rgba(201,168,76,.15));z-index:0;pointer-events:none}
+.pickup-step{padding:28px 18px;text-align:center;position:relative;z-index:1}
+.ps-circle{width:72px;height:72px;border-radius:50%;border:1px solid var(--gold);background:var(--bg);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;position:relative}
+.ps-circle::after{content:attr(data-num);position:absolute;top:-7px;right:-7px;width:20px;height:20px;background:var(--gold);border-radius:50%;font-family:var(--fd);font-size:.9rem;color:#000;display:flex;align-items:center;justify-content:center}
+.ps-title{font-family:var(--fd);font-size:1.05rem;letter-spacing:.04em;margin-bottom:5px}
+.ps-desc{font-size:.82rem;color:var(--text3);line-height:1.65}
+.pickup-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pi-card{background:var(--bg2);border:1px solid var(--border2);padding:22px;border-left:3px solid var(--gold)}
+.pi-tag{display:inline-block;font-family:var(--fm);font-size:.52rem;letter-spacing:.12em;padding:3px 8px;background:var(--gold-xs);color:var(--gold);border:1px solid rgba(201,168,76,.3);margin-bottom:8px}
+.pi-title{font-family:var(--fd);font-size:1.2rem;letter-spacing:.04em;margin-bottom:7px}
+.pi-body{font-size:.88rem;color:var(--text3);line-height:1.7}
+.pi-list{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:5px}
+.pi-list li{font-size:.85rem;color:var(--text3);padding-left:14px;position:relative}
+.pi-list li::before{content:"→";position:absolute;left:0;color:var(--gold);font-size:.75rem}
+.delivery-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.db-badge{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border2);padding:10px 14px;flex:1;min-width:140px}
+.db-icon{font-size:1.1rem}
+.db-text{font-family:var(--fm);font-size:.6rem;letter-spacing:.08em}
+.db-sub{font-size:.78rem;color:var(--text3);margin-top:2px}
+
+/* ══ LOCATIONS + MAP ════════════════════════════════════════════════════ */
+.map-section{display:flex;border:1px solid var(--border2);overflow:hidden}
+.map-sidebar{width:300px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border2);display:flex;flex-direction:column;overflow:hidden}
+.ms-header{padding:16px 18px;border-bottom:1px solid var(--border2);flex-shrink:0}
+.ms-title{font-family:var(--fd);font-size:1.3rem;letter-spacing:.04em}
+.ms-count{font-family:var(--fm);font-size:.55rem;color:var(--gold);margin-top:2px}
+.loc-search{background:var(--input-bg);border:1px solid var(--input-border);color:var(--text);font-family:var(--fm);font-size:.65rem;padding:8px 12px;width:100%;margin-top:10px;transition:border-color .2s}
+.loc-search:focus{outline:none;border-color:var(--gold)}
+.loc-search::placeholder{color:var(--text3)}
+.loc-list{overflow-y:auto;flex:1}
+.loc-item{padding:14px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:all .2s;border-left:2px solid transparent}
+.loc-item:hover,.loc-item.active{background:var(--gold-xs)}
+.loc-item.active{border-left-color:var(--gold)}
+.li-city{font-family:var(--fm);font-size:.55rem;letter-spacing:.2em;color:var(--gold)}
+.li-name{font-family:var(--fd);font-size:1.1rem;letter-spacing:.02em;margin:2px 0}
+.li-addr{font-size:.78rem;color:var(--text3);line-height:1.5}
+.li-meta{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.li-tag{font-family:var(--fm);font-size:.5rem;letter-spacing:.1em;padding:2px 6px;background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.li-tag.avail{color:var(--green);border-color:rgba(74,222,128,.25);background:rgba(74,222,128,.06)}
+.li-tag.prem{color:var(--gold);border-color:rgba(201,168,76,.3);background:var(--gold-xs)}
+.li-hours{font-family:var(--fm);font-size:.52rem;color:var(--text3);margin-top:5px}
+#apex-map{flex:1;min-height:540px;background:var(--bg3);position:relative;overflow:hidden}
+.map-osm{width:100%;height:100%;border:none;display:block}
+.map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--text3);font-family:var(--fm);font-size:.68rem;letter-spacing:.1em}
+.map-spin{width:32px;height:32px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
+<nav id="main-nav">
+  <div class="nav-logo" onclick="goHome()">APEX<small>PREMIUM VEHICLES</small></div>
+  <div class="nav-links">
+    <span class="nav-link" onclick="goHome()">HOME</span>
+    <span class="nav-link" onclick="showPage('vehicles')">FLEET</span>
+    <span class="nav-link" onclick="showPage('about')">ABOUT</span>
+    <span class="nav-link" onclick="showPage('locations')">LOCATIONS</span>
+    <span class="nav-link" onclick="showPage('reviews')">REVIEWS</span>
+    <span class="nav-link" onclick="scrollSec('how-it-works')">HOW IT WORKS</span>
+  </div>
+  <div class="nav-actions">
+    <div id="nav-guest" style="display:flex;gap:8px">
+      <button class="btn-ghost" onclick="showPage('auth','login')">LOGIN</button>
+      <button class="btn-solid" onclick="showPage('auth','signup')">BOOK NOW</button>
+    </div>
+    <div id="nav-user" style="display:none;gap:8px;align-items:center">
+      <button class="nav-icon-btn" onclick="showPage('vehicles')" title="Fleet">🚗</button>
+      <button class="nav-icon-btn" id="notif-btn" onclick="showPage('settings','notifications')" title="Notifications">
+        🔔<span class="nav-badge" id="notif-badge">3</span>
+      </button>
+      <button class="nav-icon-btn" onclick="showPage('settings','profile')" title="Settings">⚙</button>
+      <span style="font-family:var(--fm);font-size:.6rem;color:var(--text3)" id="nav-uname"></span>
+      <button class="btn-ghost" onclick="doLogout()">LOGOUT</button>
+    </div>
+  </div>
+  <button class="hamburger" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <span class="mobile-link" onclick="goHome();closeMobile()">HOME</span>
+  <span class="mobile-link" onclick="showPage('vehicles');closeMobile()">FLEET</span>
+  <span class="mobile-link" onclick="showPage('about');closeMobile()">ABOUT US</span>
+  <span class="mobile-link" onclick="showPage('locations');closeMobile()">LOCATIONS & MAP</span>
+  <span class="mobile-link" onclick="showPage('reviews');closeMobile()">REVIEWS</span>
+  <span class="mobile-link" onclick="scrollSec('how-it-works');closeMobile()">HOW IT WORKS</span>
+  <span class="mobile-link" onclick="showPage('auth','login');closeMobile()">LOGIN</span>
+  <span class="mobile-link" onclick="showPage('auth','signup');closeMobile()">BOOK NOW</span>
+  <span class="mobile-link" id="mob-settings" style="display:none" onclick="showPage('settings','profile');closeMobile()">⚙ SETTINGS</span>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     HOME PAGE
+═══════════════════════════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="slideshow" id="slideshow"></div>
+    <div class="slide-num" id="slide-num">01</div>
+    <div class="slide-dots" id="slide-dots"></div>
+    <div class="slide-label" id="slide-label">
+      <div class="sl-make" id="sl-make"></div>
+      <div class="sl-model" id="sl-model"></div>
+      <div class="sl-cat" id="sl-cat"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">CENTRAL RESERVATION SYSTEM · APEX PREMIUM</div>
+      <h1 class="hero-h1">DRIVE<em>THE ELITE.</em></h1>
+      <p class="hero-sub">India's finest luxury vehicle test drive and rental experience. From BMW to Harley, from Maybach to Royal Enfield.</p>
+      <div class="hero-btns">
+        <button class="hbtn-p" onclick="showPage('auth','signup')">RESERVE NOW</button>
+        <button class="hbtn-s" onclick="showPage('vehicles')">EXPLORE FLEET →</button>
+      </div>
+    </div>
+    <div class="scroll-cue"><div class="sc-line"></div>SCROLL</div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-bar">
+    <div class="marquee-track" id="marquee-track"></div>
+  </div>
+
+  <!-- FLEET PREVIEW -->
+  <section class="section" id="fleet-preview" style="padding-bottom:0">
+    <div class="sec-eye">OUR FLEET</div>
+    <div class="sec-title">SELECT YOUR <span style="color:var(--gold)">MACHINE</span></div>
+    <p class="sec-sub">30+ premium vehicles across luxury cars and performance motorcycles</p>
+    <div class="fleet-preview-grid" id="fleet-preview-grid"></div>
+    <div style="text-align:center;padding:44px">
+      <button class="btn-p" style="padding:13px 44px;font-size:.72rem;letter-spacing:.16em" onclick="showPage('vehicles')">VIEW ALL 30+ VEHICLES →</button>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works" style="background:var(--bg2)">
+    <div class="sec-eye">THE PROCESS</div>
+    <div class="sec-title">HOW IT <span style="color:var(--gold)">WORKS</span></div>
+    <p class="sec-sub">Four steps to your premium driving experience</p>
+    <div class="steps-grid">
+      <div class="step-card"><div class="step-num">01</div><div class="step-icon">🔐</div><div class="step-title">CREATE ACCOUNT</div><p class="step-desc">Sign up in seconds. Secure Firebase authentication protects your data.</p></div>
+      <div class="step-card"><div class="step-num">02</div><div class="step-icon">🚗</div><div class="step-title">CHOOSE VEHICLE</div><p class="step-desc">Browse 30+ luxury cars and premium motorcycles. Filter, search, and compare.</p></div>
+      <div class="step-card"><div class="step-num">03</div><div class="step-icon">📅</div><div class="step-title">PICK DATE & SLOT</div><p class="step-desc">Dynamic calendar shows real availability. Choose test drive or rental duration.</p></div>
+      <div class="step-card"><div class="step-num">04</div><div class="step-icon">✦</div><div class="step-title">CONFIRM & DRIVE</div><p class="step-desc">Upload your ID. Admin verifies it and approves. Unique booking ID generated instantly.</p></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="ft-logo">APEX</div>
+        <p class="ft-desc">India's premier platform for luxury vehicle experiences — test drives and rentals across premium car and motorcycle brands.</p>
+      </div>
+      <div>
+        <div class="ft-col-hd">NAVIGATE</div>
+        <span class="ft-lnk" onclick="goHome()">Home</span>
+        <span class="ft-lnk" onclick="showPage('vehicles')">Fleet</span>
+        <span class="ft-lnk" onclick="showPage('about')">About Us</span>
+        <span class="ft-lnk" onclick="showPage('locations')">Locations & Map</span>
+        <span class="ft-lnk" onclick="showPage('reviews')">Reviews</span>
+        <span class="ft-lnk" onclick="showPage('auth','signup')">Book Now</span>
+        <span class="ft-lnk" onclick="showPage('settings','profile')">My Account</span>
+      </div>
+      <div>
+        <div class="ft-col-hd">BRANDS</div>
+        <span class="ft-lnk">BMW · Mercedes</span>
+        <span class="ft-lnk">Jaguar · Maybach</span>
+        <span class="ft-lnk">Range Rover</span>
+        <span class="ft-lnk">Triumph · Harley</span>
+        <span class="ft-lnk">Royal Enfield · Jawa</span>
+      </div>
+      <div>
+        <div class="ft-col-hd">CONTACT</div>
+        <span class="ft-lnk">📍 Chennai, Tamil Nadu</span>
+        <span class="ft-lnk">📞 +91 98765 43210</span>
+        <span class="ft-lnk">✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1a73747c755a7b6a7f626c7f727379767f69347374">[email&#160;protected]</a></span>
+        <span class="ft-lnk" onclick="showPage('auth','login')">Customer Login</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="ft-copy">© 2024 APEX PREMIUM VEHICLES · MCA MINI PROJECT · CENTRAL RESERVATION SYSTEM</div>
+      <span class="ft-admin" onclick="window.open('admin_final.html','_blank')">⚙ ADMIN PORTAL →</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     FLEET PAGE
+═══════════════════════════════════════════════════════════════════════ -->
+<div id="page-vehicles" class="page">
+  <div class="vpage-header">
+    <div class="vpage-title">OUR <span>FLEET</span></div>
+    <p class="vpage-sub">Select a vehicle to book a test drive or rental experience</p>
+    <div class="filter-row">
+      <span class="flbl">TYPE:</span>
+      <button class="fb on" data-g="type" data-v="all" onclick="setFilter(this,'type','all')">ALL</button>
+      <button class="fb" data-g="type" data-v="car" onclick="setFilter(this,'type','car')">CARS</button>
+      <button class="fb" data-g="type" data-v="motorcycle" onclick="setFilter(this,'type','motorcycle')">MOTORCYCLES</button>
+      <div class="filter-sep"></div>
+      <span class="flbl">STATUS:</span>
+      <button class="fb on" data-g="avail" data-v="all" onclick="setFilter(this,'avail','all')">ALL</button>
+      <button class="fb" data-g="avail" data-v="yes" onclick="setFilter(this,'avail','yes')">AVAILABLE</button>
+      <div class="filter-sep"></div>
+      <span class="flbl">SORT:</span>
+      <button class="fb on" data-g="sort" data-v="name" onclick="setFilter(this,'sort','name')">NAME</button>
+      <button class="fb" data-g="sort" data-v="price-asc" onclick="setFilter(this,'sort','price-asc')">PRICE ↑</button>
+      <button class="fb" data-g="sort" data-v="price-desc" onclick="setFilter(this,'sort','price-desc')">PRICE ↓</button>
+      <input class="v-search" placeholder="🔍 Search make, model…" oninput="setSearch(this.value)">
+    </div>
+  </div>
+  <div id="vgrid" style="padding:2px 20px 40px"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     AUTH PAGE
+═══════════════════════════════════════════════════════════════════════ -->
+<div id="page-auth" class="page">
+  <div class="auth-wrap">
+    <div class="auth-logo">APEX</div>
+    <p class="auth-tag">Premium Vehicle Reservation System</p>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="atab on" id="atab-login" onclick="switchAuthTab('login')">LOGIN</button>
+        <button class="atab" id="atab-signup" onclick="switchAuthTab('signup')">SIGN UP</button>
+      </div>
+      <div id="auth-form"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SETTINGS PAGE
+═══════════════════════════════════════════════════════════════════════ -->
+<div id="page-settings" class="page">
+  <div class="settings-wrap">
+    <div class="settings-header">
+      <div class="settings-title">SETT<span>INGS</span></div>
+      <p style="font-style:italic;color:var(--text3);margin-top:4px">Manage your account, preferences, and bookings</p>
+    </div>
+    <div class="settings-grid">
+      <div class="settings-sidebar">
+        <div class="st-link on" id="stl-profile" onclick="switchSettings('profile')"><span class="st-icon">👤</span>PROFILE</div>
+        <div class="st-link" id="stl-bookings" onclick="switchSettings('bookings')"><span class="st-icon">📋</span>MY BOOKINGS</div>
+        <div class="st-link" id="stl-reminders" onclick="switchSettings('reminders')"><span class="st-icon">⏰</span>REMINDERS</div>
+        <div class="st-link" id="stl-notifications" onclick="switchSettings('notifications')"><span class="st-icon">🔔</span>NOTIFICATIONS</div>
+        <div class="st-link" id="stl-appearance" onclick="switchSettings('appearance')"><span class="st-icon">🎨</span>APPEARANCE</div>
+        <div class="st-link" id="stl-preferences" onclick="switchSettings('preferences')"><span class="st-icon">⚙</span>PREFERENCES</div>
+        <div class="st-link" id="stl-privacy" onclick="switchSettings('privacy')"><span class="st-icon">🔒</span>PRIVACY</div>
+        <div class="st-link" id="stl-help" onclick="switchSettings('help')"><span class="st-icon">❓</span>HELP</div>
+      </div>
+      <div class="settings-main" id="settings-main">
+        <!-- injected by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BOOKING MODAL ══════════════════════════════════════════════════════ -->
+<div id="modal-overlay">
+  <div class="modal-box">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- ══ ABOUT PAGE ════════════════════════════════════════════════════ -->
+<div id="page-about" class="page"></div>
+
+<!-- ══ REVIEWS PAGE ══════════════════════════════════════════════════ -->
+<div id="page-reviews" class="page"></div>
+
+<!-- ══ LOCATIONS PAGE ════════════════════════════════════════════════ -->
+<div id="page-locations" class="page"></div>
+
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     FIREBASE + APP JS
+═══════════════════════════════════════════════════════════════════════ -->
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+//  APEX — Spring Boot + MySQL Backend
+//  All auth, bookings and reviews connect to http://localhost:8080
+// ═══════════════════════════════════════════════════════════════════════
+const API = "http://localhost:8080/api";
+const ADMIN_EMAILS = ["admin@apex.com","dealer@apex.com"];
+
+const Auth = {
+  token:   () => localStorage.getItem("apex_token"),
+  user:    () => { try { return JSON.parse(localStorage.getItem("apex_user") || "null"); } catch { return null; } },
+  save:    (d) => { localStorage.setItem("apex_token", d.token); localStorage.setItem("apex_user", JSON.stringify(d)); },
+  clear:   () => { localStorage.removeItem("apex_token"); localStorage.removeItem("apex_user"); },
+  headers: () => ({ "Content-Type": "application/json", "Authorization": "Bearer " + Auth.token() })
+};
+
+async function api(method, path, body) {
+  const res = await fetch(API + path, {
+    method, headers: Auth.headers(),
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (res.status === 204) return {};
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Request failed (" + res.status + ")");
+  return data;
+}
+
+// ══ VEHICLE DATA ═══════════════════════════════════════════════════════
+// Fleet breakdown: 30 Indian premium (60%) · 20 International premium (40%)
+const VEHICLES=[
+
+  // ════════════════════════════════════════════════════════════════
+  // SECTION A — INDIAN PREMIUM CARS (18 vehicles)
+  // ════════════════════════════════════════════════════════════════
+
+  // ── TATA PREMIUM ──────────────────────────────────────────────
+  {id:"i01",make:"Mahindra",model:"Thar",type:"car",year:2024,hp:170,seats:5,trans:"Automatic",fuel:"Diesel",ph:900,pd:6000,avail:true,
+   img:"https://images.unsplash.com/photo-1710225358761-4f5891df657d?q=80&w=464&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+   thumb:"https://images.unsplash.com/photo-1710225358761-4f5891df657d?q=80&w=464&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"},
+
+  {id:"i02",make:"Hyundai",model:"i20",type:"car",year:2024,hp:170,seats:7,trans:"Automatic",fuel:"Diesel",ph:800,pd:5950,avail:true,
+   img:"https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=700&q=80",
+   thumb:"https://www.v3cars.com/media/model-imgs/1665466646-02-Left-Front-Qtr.webp"},
+
+  {id:"i03",make:"Tata",model:"Nexon EV Max Long Range",type:"car",year:2024,hp:143,seats:5,trans:"Automatic",fuel:"Electric",ph:950,pd:6500,avail:true,
+   img:"https://images.unsplash.com/photo-1593941707882-a56bbc8ba4d9?w=700&q=80",
+   thumb:"https://media.fortuneindia.com/fortune-india/import/2023-09/c7560ff2-35ba-46ea-96ca-ae2a2fa86ef5/tata_nexon_ev.jpg?rect=0,0,1467,825&w=640&auto=format,compress&q=80"},
+
+  {id:"i04",make:"Tata",model:"Punch EV Empowered+",type:"car",year:2024,hp:122,seats:5,trans:"Automatic",fuel:"Electric",ph:900,pd:6500,avail:true,
+   img:"https://images.unsplash.com/photo-1563720223185-11003d516935?w=700&q=80",
+   thumb:"https://motoringworld.in/wp-content/uploads/2024/01/4-1.png"},
+
+  {id:"i05",make:"Tata",model:"Curvv EV Accomplished+",type:"car",year:2024,hp:167,seats:5,trans:"Automatic",fuel:"Electric",ph:950,pd:6500,avail:true,
+   img:"https://images.unsplash.com/photo-1602777924212-89d3e1fc3e97?w=700&q=80",
+   thumb:"https://media.zigcdn.com/media/content/2024/Jul/669a31b50a4a6.jpg?tr=w-420"},
+
+  // ── MAHINDRA PREMIUM ──────────────────────────────────────────
+  {id:"i06",make:"Mahindra",model:"XUV700 AX7 Luxury",type:"car",year:2024,hp:200,seats:7,trans:"Automatic",fuel:"Petrol",ph:1150,pd:7080,avail:true,
+   img:"https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=700&q=80",
+   thumb:"https://media.zigcdn.com/media/model/2025/Nov/model-extimg-981834496_600x400.jpg"},
+
+  {id:"i07",make:"Mahindra",model:"Thar Roxx 4XDRIVE",type:"car",year:2024,hp:175,seats:5,trans:"Automatic",fuel:"Diesel",ph:1312,pd:6900,avail:true,
+   img:"https://images.unsplash.com/photo-1506015391300-4802dc74de2e?w=700&q=80",
+   thumb:"https://images.hindustantimes.com/auto/img/2024/08/17/1600x900/Mahindra_Thar_Roxx_01_1723863061883_1723888572288.jpg"},
+
+  {id:"i08",make:"Mahindra",model:"Scorpio-N Z8 Ultimate",type:"car",year:2024,hp:175,seats:7,trans:"Automatic",fuel:"Diesel",ph:1200,pd:6320,avail:true,
+   img:"https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=700&q=80",
+   thumb:"https://spn-sta.spinny.com/blog/20220627145950/Mahindra-Scorpio-N-header.jpg"},
+
+  {id:"i09",make:"Mahindra",model:"XEV 9e All Electric",type:"car",year:2024,hp:286,seats:5,trans:"Automatic",fuel:"Electric",ph:800,pd:6000,avail:true,
+   img:"https://images.unsplash.com/photo-1555399718-4f2e64a42e13?w=700&q=80",
+   thumb:"https://vandipranthan.com/wp-content/uploads/2025/01/abc-be-6.jpg"},
+
+  {id:"i10",make:"Mahindra",model:"BE 6e Performance EV",type:"car",year:2024,hp:228,seats:5,trans:"Automatic",fuel:"Electric",ph:1002,pd:6020,avail:false,
+   img:"https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=700&q=80",
+   thumb:"https://content.carlelo.com/media/models/BE6/base/be-6-11.webp"},
+
+  // ── MARUTI SUZUKI PREMIUM ─────────────────────────────────────
+  {id:"i11",make:"Maruti",model:"Grand Vitara Alpha+ Hybrid",type:"car",year:2024,hp:103,seats:5,trans:"Automatic",fuel:"Hybrid",ph:1100,pd:7400,avail:true,
+   img:"https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=700&q=80",
+   thumb:"https://imgd.aeplcdn.com/664x374/n/cw/ec/123185/grand-vitara-exterior-right-front-three-quarter-3.jpeg?isig=0&q=80"},
+
+  {id:"i12",make:"Maruti",model:"Invicto ZXi Plus",type:"car",year:2024,hp:116,seats:7,trans:"Automatic",fuel:"Hybrid",ph:1500,pd:7870,avail:true,
+   img:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=700&q=80",
+   thumb:"https://www.spinny.com/blog/wp-content/uploads/2024/07/Maruti-Suzuki-Invicto.webp"},
+
+  {id:"i13",make:"Maruti",model:"Fronx Alpha Turbo",type:"car",year:2024,hp:100,seats:5,trans:"Automatic",fuel:"Petrol",ph:1000,pd:6500,avail:true,
+   img:"https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=700&q=80",
+   thumb:"https://imgd.aeplcdn.com/1920x1080/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-108.jpeg?isig=0&q=80&q=80"},
+
+  // ── HYUNDAI INDIA PREMIUM ─────────────────────────────────────
+  {id:"i14",make:"Hyundai",model:"Creta EV Executive",type:"car",year:2024,hp:170,seats:5,trans:"Automatic",fuel:"Electric",ph:900,pd:6000,avail:true,
+   img:"https://images.unsplash.com/photo-1532581140115-3e355d1ed1de?w=700&q=80",
+   thumb:"https://www.hyundai.com/content/dam/hyundai/in/en/data/find-a-car/creta-electric/highlights/cretaevsmallimage1.jpg"},
+
+  {id:"i15",make:"Hyundai",model:"Ioniq 6 Premium",type:"car",year:2024,hp:229,seats:5,trans:"Automatic",fuel:"Electric",ph:1000,pd:6000,avail:true,
+   img:"https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=700&q=80",
+   thumb:"https://static.independent.co.uk/2025/05/06/15/57/Hyundai-Ioniq-5-N.png"},
+
+  {id:"i16",make:"Hyundai",model:"Tucson N-Line AWD",type:"car",year:2024,hp:180,seats:5,trans:"Automatic",fuel:"Petrol",ph:1100,pd:6700,avail:false,
+   img:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=700&q=80",
+   thumb:"https://www.usnews.com/object/image/0000019a-3bfe-d7f7-adfb-3bfedde40000/2026-hyundai-tucson-front-angle-view-hma.jpg?update-time=1761943149361&size=responsive640&format=webp"},
+
+  // ── KIA INDIA PREMIUM ─────────────────────────────────────────
+  {id:"i17",make:"Kia",model:"Seltos",type:"car",year:2024,hp:325,seats:5,trans:"Automatic",fuel:"Petrol",ph:950,pd:6200,avail:true,
+   img:"https://images.unsplash.com/photo-1617788138017-80ad40651399?w=700&q=80",
+   thumb:"https://static-cdn.cars24.com/prod/auto-news24-cms/Newsroom/2024/12/31/477ff882-d998-4a38-83c4-9b202cd2517b-2025-kia-seltos-gravity-edition-black-suv-design-kia.jpg?w=356&dpr=2.625&optimize=low&format=auto&quality=50"},
+
+  {id:"i18",make:"Kia",model:"Carnival Limousine",type:"car",year:2024,hp:200,seats:8,trans:"Automatic",fuel:"Diesel",ph:1400,pd:7600,avail:true,
+   img:"https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=700&q=80",
+   thumb:"https://hips.hearstapps.com/mtg-prod/65f7f75cfa6ceb0008e5c27b/2025-kia-carnival-minivan-reveal-3.jpg"},
+
+  // ════════════════════════════════════════════════════════════════
+  // SECTION B — INDIAN PREMIUM MOTORCYCLES (12 vehicles)
+  // ════════════════════════════════════════════════════════════════
+
+  {id:"im01",make:"Royal Enfield",model:"Super Meteor 650",type:"motorcycle",year:2024,hp:47,seats:2,trans:"Manual",fuel:"Petrol",ph:600,pd:4000,avail:true,
+   img:"https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=700&q=80",
+   thumb:"https://imgd.aeplcdn.com/1280x720/n/cw/ec/210213/meteor-350-right-front-three-quarter-3.jpeg?isig=0"},
+
+  {id:"im02",make:"Royal Enfield",model:"Interceptor 650",type:"motorcycle",year:2024,hp:47,seats:2,trans:"Manual",fuel:"Petrol",ph:400,pd:4050,avail:true,
+   img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80",
+   thumb:"https://www.webbikeworld.com/wp-content/uploads/2023/08/2022-Royal-Enfield-Interceptor-650-Review-2.jpg"},
+
+  {id:"im03",make:"Royal Enfield",model:"Himalayan 450",type:"motorcycle",year:2024,hp:40,seats:2,trans:"Manual",fuel:"Petrol",ph:400,pd:3000,avail:true,
+   img:"https://images.unsplash.com/photo-1615172282427-9a57ef2d142e?w=700&q=80",
+   thumb:"https://akm-img-a-in.tosshub.com/businesstoday/images/story/202311/2nd0014_p-sixteen_nine.jpg?size=948:533"},
+
+  {id:"im04",make:"Royal Enfield",model:"Bullet 350 B55",type:"motorcycle",year:2024,hp:20,seats:2,trans:"Manual",fuel:"Petrol",ph:750,pd:4500,avail:true,
+   img:"https://images.unsplash.com/photo-1568772585407-9f217745d51a?w=700&q=80",
+   thumb:"https://cdn.motor1.com/images/mgl/9mNq8X/354:0:1080:1080/royal-enfield-bullet-350---black-gold.webp"},
+
+  {id:"im05",make:"Royal Enfield",model:"Hunter 350 Metro",type:"motorcycle",year:2024,hp:20,seats:2,trans:"Manual",fuel:"Petrol",ph:600,pd:3500,avail:true,
+   img:"https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=700&q=80",
+   thumb:"https://cdn.motor1.com/images/mgl/NGK3o2/s1/royal-enfield-hunter-350---old-joliet-prison.webp"},
+
+  {id:"im06",make:"Jawa",model:"42 FJ Perak",type:"motorcycle",year:2024,hp:30,seats:2,trans:"Manual",fuel:"Petrol",ph:600,pd:3500,avail:true,
+   img:"https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=700&q=80",
+   thumb:"https://www.wheelsbingo.com/images/web-img/blogs/89859_bimg.webp"},
+
+  {id:"im07",make:"Jawa",model:"Perak Bobber Custom",type:"motorcycle",year:2024,hp:30,seats:1,trans:"Manual",fuel:"Petrol",ph:500,pd:3085,avail:false,
+   img:"https://images.unsplash.com/photo-1568139235400-d84b3e70b07e?w=700&q=80",
+   thumb:"https://images.overdrive.in/wp-content/uploads/2023/09/2023-Jawa-42-Bobber-900x506.jpg"},
+
+  {id:"im08",make:"KTM",model:"Duke 390",type:"motorcycle",year:2024,hp:45,seats:2,trans:"Manual",fuel:"Petrol",ph:500,pd:4400,avail:true,
+   img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80",
+   thumb:"https://5.imimg.com/data5/ED/XD/MY-38875342/ktm-duke.jpg"},
+
+  {id:"im09",make:"KTM",model:"Adventure 390",type:"motorcycle",year:2024,hp:46,seats:2,trans:"Manual",fuel:"Petrol",ph:482,pd:4060,avail:true,
+   img:"https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=700&q=80",
+   thumb:"https://imgd.aeplcdn.com/1280x720/n/cw/ec/170715/390-adventure-2025-right-rear-three-quarter.jpeg?isig=0"},
+
+  {id:"im10",make:"Hero",model:"Mavrick 440",type:"motorcycle",year:2024,hp:27,seats:2,trans:"Manual",fuel:"Petrol",ph:402,pd:4035,avail:true,
+   img:"https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=700&q=80",
+   thumb:"https://gaadiwaadi.com/wp-content/uploads/2024/01/hero-mavrick-440-6.jpg"},
+
+  {id:"im11",make:"Bajaj",model:"Dominar 400 TS",type:"motorcycle",year:2024,hp:40,seats:2,trans:"Manual",fuel:"Petrol",ph:452,pd:4500,avail:true,
+   img:"https://images.unsplash.com/photo-1568139235400-d84b3e70b07e?w=700&q=80",
+   thumb:"https://sc0.blr1.cdn.digitaloceanspaces.com/article/116437-txtfhilqgi-1554097899.jpeg"},
+
+  {id:"im12",make:"Bajaj",model:"Pulsar NS400Z",type:"motorcycle",year:2024,hp:45,seats:2,trans:"Manual",fuel:"Petrol",ph:440,pd:4085,avail:true,
+   img:"https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=700&q=80",
+   thumb:"https://motoringworld.in/wp-content/uploads/2024/05/Bajaj-Pulsar-NS400Z.jpg"},
+
+  // ════════════════════════════════════════════════════════════════
+  // SECTION C — INTERNATIONAL PREMIUM CARS (12 vehicles — 40%)
+  // ════════════════════════════════════════════════════════════════
+
+  {id:"c01",make:"BMW",model:"M5 Competition",type:"car",year:2024,hp:625,seats:5,trans:"Automatic",fuel:"Petrol",ph:2000,pd:9750,avail:true,
+   img:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=700&q=80",
+   thumb:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=80"},
+
+  {id:"c02",make:"Mercedes",model:"AMG GT 63 S",type:"car",year:2024,hp:630,seats:4,trans:"Automatic",fuel:"Petrol",ph:4035,pd:10060,avail:true,
+   img:"https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=700&q=80",
+   thumb:"https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&q=80"},
+
+  {id:"c03",make:"Mercedes",model:"S-Class S680",type:"car",year:2024,hp:612,seats:5,trans:"Automatic",fuel:"Petrol",ph:4840,pd:11000,avail:true,
+   img:"https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=700&q=80",
+   thumb:"https://www.topgear.com/sites/default/files/2022/03/1-Mercedes-S-Class-plug-in.jpg"},
+
+  {id:"c04",make:"Maybach",model:"S680 Haute Voiture",type:"car",year:2024,hp:621,seats:4,trans:"Automatic",fuel:"Petrol",ph:5000,pd:14000,avail:true,
+   img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=700&q=80",
+   thumb:"https://media.zigcdn.com/media/model/2022/Jan/front-1-4-left-486137542_930x620.jpg"},
+
+  {id:"c05",make:"Range Rover",model:"Evoque",type:"car",year:2024,hp:530,seats:5,trans:"Automatic",fuel:"Diesel",ph:4900,pd:10000,avail:true,
+   img:"https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=700&q=80",
+   thumb:"https://images.overdrive.in/wp-content/uploads/2024/01/Untitled-design-96-900x506.png"},
+
+  {id:"c06",make:"Range Rover",model:"Defender V8",type:"car",year:2024,hp:518,seats:5,trans:"Automatic",fuel:"Petrol",ph:5000,pd:9900,avail:true,
+   img:"https://images.unsplash.com/photo-1619551734325-81176a53e6f9?w=700&q=80",
+   thumb:"https://img.autocarindia.com/ExtraImages/20250528071638_2025%20Defender%20front%20quarter%20.jpg?w=728&q=75"},
+
+  {id:"c07",make:"Porsche",model:"911 GT3 RS",type:"car",year:2024,hp:518,seats:2,trans:"PDK",fuel:"Petrol",ph:5500,pd:13500,avail:true,
+   img:"https://images.unsplash.com/photo-1547245324-d777c6f05e80?w=700&q=80",
+   thumb:"https://www.thedrive.com/wp-content/uploads/2023/08/11/porsche-carrera-T-review-lead.jpg?quality=85"},
+
+  {id:"c08",make:"Lamborghini",model:"Huracán EVO",type:"car",year:2024,hp:630,seats:2,trans:"LDF",fuel:"Petrol",ph:6000,pd:15000,avail:true,
+   img:"https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=700&q=80",
+   thumb:"https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=400&q=80"},
+
+  {id:"c09",make:"Ferrari",model:"Roma Spider",type:"car",year:2024,hp:620,seats:2,trans:"DCT",fuel:"Petrol",ph:6500,pd:12700,avail:false,
+   img:"https://images.unsplash.com/photo-1592198084033-aade902d1aae?w=700&q=80",
+   thumb:"https://images.unsplash.com/photo-1592198084033-aade902d1aae?w=400&q=80"},
+
+  {id:"c10",make:"Jaguar",model:"F-Pace R",type:"car",year:2024,hp:575,seats:2,trans:"Automatic",fuel:"Petrol",ph:5000,pd:9020,avail:true,
+   img:"https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=700&q=80",
+   thumb:"https://images.overdrive.in/wp-content/uploads/2021/04/2021-jaguar-f-pace-booking-02.jpg"},
+
+  {id:"c11",make:"BMW",model:"X7 M60i",type:"car",year:2024,hp:530,seats:7,trans:"Automatic",fuel:"Petrol",ph:6515,pd:9820,avail:true,
+   img:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=700&q=80",
+   thumb:"https://hips.hearstapps.com/hmg-prod/images/2023-bmw-x7-xdrive-40i134-641c5b3ca7165.jpg?crop=0.607xw:0.455xh;0.275xw,0.381xh&resize=1200:*"},
+
+  {id:"c12",make:"Mercedes",model:"GLE 63 AMG",type:"car",year:2024,hp:603,seats:5,trans:"Automatic",fuel:"Petrol",ph:8025,pd:13080,avail:false,
+   img:"https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=700&q=80",
+   thumb:"https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=400&q=80"},
+
+  // ════════════════════════════════════════════════════════════════
+  // SECTION D — INTERNATIONAL PREMIUM MOTORCYCLES (8 vehicles)
+  // ════════════════════════════════════════════════════════════════
+
+  {id:"m01",make:"Triumph",model:"Speed Triple 1200 RS",type:"motorcycle",year:2024,hp:180,seats:1,trans:"Manual",fuel:"Petrol",ph:2500,pd:6000,avail:true,
+   img:"https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=700&q=80",
+   thumb:"https://gen-performance.com/cdn/shop/files/TRIUMPH_SPEED_TRIPLE_1200_RS_GEN_PERFORMANCE.webp?v=1733768115&width=3840"},
+
+  {id:"m02",make:"Triumph",model:"Tiger 900 GT Pro",type:"motorcycle",year:2024,hp:95,seats:2,trans:"Manual",fuel:"Petrol",ph:3000,pd:7500,avail:true,
+   img:"https://images.unsplash.com/photo-1568139235400-d84b3e70b07e?w=700&q=80",
+   thumb:"https://imgd.aeplcdn.com/664x374/n/cw/ec/121719/tiger-1200-right-front-three-quarter.jpeg?isig=0&q=80"},
+
+  {id:"m03",make:"Harley-Davidson",model:"Fat Boy 114",type:"motorcycle",year:2024,hp:100,seats:2,trans:"Manual",fuel:"Petrol",ph:3500,pd:7460,avail:true,
+   img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80",
+   thumb:"https://www.carandbike.com/_next/image?url=https%3A%2F%2Fimages.carandbike.com%2Fcms%2Farticles%2F2025%2F5%2F3217006%2FLimited_Run_Harley_Davidson_Fat_Boy_Gray_Ghost_Revealed_61654bdfe9.jpg&w=640&q=90"},
+
+  {id:"m04",make:"Harley-Davidson",model:"SPORTSTAR",type:"motorcycle",year:2024,hp:115,seats:2,trans:"Manual",fuel:"Petrol",ph:3000,pd:6000,avail:true,
+   img:"https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=700&q=80",
+   thumb:"https://images.firstpost.com/wp-content/uploads/2021/12/harley-davidson-sportster-s-launched-india-15-51-lakh-price-india-bike-week-2021-1.jpg?im=FitAndFill=(1200,675)"},
+
+  {id:"m05",make:"SUZUKI",model:"HAYABUSA",type:"motorcycle",year:2024,hp:215,seats:1,trans:"Manual",fuel:"Petrol",ph:3500,pd:6800,avail:true,
+   img:"https://images.unsplash.com/photo-1615172282427-9a57ef2d142e?w=700&q=80",
+   thumb:"https://www.globalsuzuki.com/motorcycle/smgs/products/2026hayabusa/img/main_ph.jpg"},
+
+  {id:"m06",make:"Kawasaki",model:"Ninja ZX-10R",type:"motorcycle",year:2024,hp:203,seats:2,trans:"Manual",fuel:"Petrol",ph:3800,pd:5900,avail:true,
+   img:"https://images.unsplash.com/photo-1568772585407-9f217745d51a?w=700&q=80",
+   thumb:"https://i.pinimg.com/736x/38/7d/e5/387de5f08e628ac96e481fcd795e13c2.jpg"},
+
+  {id:"m07",make:"Honda",model:"CB1000R Black Edition",type:"motorcycle",year:2024,hp:145,seats:2,trans:"Manual",fuel:"Petrol",ph:2900,pd:4500,avail:true,
+   img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80",
+   thumb:"https://www.cycleworld.com/resizer/Z28JtTdfPyZE-fSZzPvHYeFz91E=/arc-photo-octane/arc3-prod/public/5B4DWDBSWPWNHB6FUQCVR2553E.jpg"},
+
+  {id:"m08",make:"Triumph",model:"Bonneville T120",type:"motorcycle",year:2024,hp:80,seats:2,trans:"Manual",fuel:"Petrol",ph:2900,pd:5000,avail:false,
+   img:"https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=700&q=80",
+   thumb:"https://media.triumphmotorcycles.co.uk/image/upload/f_auto/q_auto:eco/sitecoremedialibrary/media-library/images/motorcycles/modern-classics/my21/t120/family%20page%20images/t120-family-timeline-slide-style-1920x780.jpg"},
+];
+
+window.VEHICLES=VEHICLES;
+
+// ══ SLIDESHOW DATA ═════════════════════════════════════════════════════
+const SLIDES=[
+  {img:"https://imgd.aeplcdn.com/1920x1080/n/cw/ec/175183/new-5-series-exterior-right-front-three-quarter-94.jpeg?isig=0&q=80&q=80",make:"BMW",model:"5 SERIES",cat:"LUXURY SEADEN"},
+  {img:"https://hips.hearstapps.com/hmg-prod/images/2023-mercedes-amg-c63-s-e-performance-118-65d7969b525e3.jpg?crop=0.742xw:0.628xh;0.207xw,0.204xh&resize=2048:*",make:"MERCEDES",model:"AMG C63",cat:""},
+  {img:"https://etimg.etb2bimg.com/photo/102922437.cms",make:"PORSCHE",model:"CAYENNE",cat:""},
+  {img:"https://stimg.cardekho.com/images/carexteriorimages/930x620/Jaguar/XF/8670/Jaguar-XF-2.0-Petrol-R-Dynamic-S/1635170619851/front-left-side-47.jpg",make:"JAGUAR",model:"XF PACE",cat:"INDIAN LUXURY"},
+  {img:"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1600&q=85",make:"BMW",model:"M5 Competition",cat:"LUXURY SEDAN"},
+  {img:"https://static.toiimg.com/thumb/resizemode-4,width-1280,height-720,msid-79305644/79305644.jpg",make:"Maybach",model:"S680 Haute Voiture",cat:"ULTRA LUXURY"},
+  {img:"https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=1600&q=85",make:"Lamborghini",model:"Huracán EVO",cat:"SUPERCAR"},
+  {img:"https://imgd.aeplcdn.com/664x374/n/cw/ec/122451/range-rover-sport-exterior-right-front-three-quarter-44.avif?isig=0&q=80",make:"Range Rover",model:"EVOQUE",cat:"LUXURY SUV"},
+  {img:"https://timesofindia.indiatimes.com/thumb/msid-97029180,width-1280,height-720,resizemode-4/97029180.jpg",make:"Royal Enfield",model:"Super Meteor 650",cat:"INDIAN CRUISER"},
+  ];
+
+const BRANDS=["TATA","MAHINDRA","MARUTI SUZUKI","HYUNDAI","KIA","ROYAL ENFIELD","JAWA","KTM","BAJAJ","HERO","BMW","MERCEDES","MAYBACH","RANGE ROVER","PORSCHE","LAMBORGHINI","FERRARI","TRIUMPH","HARLEY-DAVIDSON","DUCATI","KAWASAKI","HONDA"];
+
+// ══ STATE ══════════════════════════════════════════════════════════════
+let currentUser=null,isAdmin=false;
+let slideIdx=0,slideTimer=null;
+let filterType="all",filterAvail="all",filterSort="name",searchQ="";
+let selV=null,selDate=null,selSlot=null,bookType="testdrive",rentalDur="daily";
+let uploadFile=null,uploadURL=null;
+let calY,calM;
+const TAKEN=["09:00","11:00","14:00","16:00"];
+let myBookings=[];
+let favorites=JSON.parse(localStorage.getItem("apex_favs")||"[]");
+let reminders=JSON.parse(localStorage.getItem("apex_reminders")||JSON.stringify([
+  {id:"r1",title:"BMW M5 Test Drive",desc:"Your test drive is scheduled for tomorrow at 10:00 AM",time:"Tomorrow, 10:00 AM",icon:"🏁",dismissed:false},
+  {id:"r2",title:"Booking Confirmation Pending",desc:"Your Range Rover SVAutobiography booking is awaiting admin approval",time:"2 hours ago",icon:"⏳",dismissed:false},
+]));
+let notifications=[
+  {id:"n1",text:"Your BMW M5 Competition test drive has been APPROVED ✓",time:"1 hour ago",read:false},
+  {id:"n2",text:"New premium vehicles added to the fleet — Maybach GLS 600 & Lamborghini Huracán",time:"3 hours ago",read:false},
+  {id:"n3",text:"Special offer: 15% off weekly rentals this weekend for loyal customers",time:"Yesterday",read:false},
+  {id:"n4",text:"Booking BK1A2B3C status updated to Approved",time:"2 days ago",read:true},
+];
+let profile={name:"",email:"",phone:"",dob:"",address:"",license:""};
+let prefs={emailNotif:true,smsNotif:false,pushNotif:true,newsletter:false,autoReminder:true,showPrices:true};
+
+// ══ INIT ═══════════════════════════════════════════════════════════════
+window.addEventListener("load", () => {
+  const savedTheme = localStorage.getItem("apex_theme") || "dark";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  initSlideshow();
+  buildMarquee();
+  renderAuthForm("login");
+  renderSettingsPanel("profile");
+  loadVehiclesFromAPI();
+  // Restore JWT session
+  const u = Auth.user();
+  if (u && Auth.token()) {
+    currentUser = { email: u.email, displayName: u.name, uid: String(u.userId), role: u.role };
+    isAdmin = u.role === "ADMIN";
+    onLogin();
+  }
+});
+
+async function loadVehiclesFromAPI() {
+  try {
+    const data = await api("GET", "/vehicles");
+    window.VEHICLES = data.map(v => ({
+      id: v.id, make: v.make, model: v.model, type: v.type,
+      year: v.year, hp: v.horsepower, seats: v.seats,
+      trans: v.transmission, fuel: v.fuel,
+      ph: v.pricePerHour, pd: v.pricePerDay,
+      avail: v.available, img: v.imageUrl,
+      thumb: v.thumbUrl || v.imageUrl
+    }));
+    console.log("Loaded", window.VEHICLES.length, "vehicles from MySQL");
+  } catch (e) {
+    console.warn("API unavailable, using built-in vehicles:", e.message);
+  }
+  buildFleetPreview();
+  renderVGrid();
+}
+
+// ══ AUTH ═══════════════════════════════════════════════════════════════
+function onLogin(){
+  const name=currentUser.displayName||currentUser.email.split("@")[0];
+  profile.name=name; profile.email=currentUser.email||"";
+  document.getElementById("nav-guest").style.display="none";
+  document.getElementById("nav-user").style.display="flex";
+  document.getElementById("nav-uname").textContent=name.toUpperCase();
+  document.getElementById("mob-settings").style.display="block";
+  updateNotifBadge();
+  if(isAdmin) toast("Admin access detected. Opening admin portal…","i");
+}
+
+window.doLogout = async () => {
+  Auth.clear();
+  currentUser = null; isAdmin = false;
+  document.getElementById("nav-guest").style.display = "flex";
+  document.getElementById("nav-user").style.display = "none";
+  document.getElementById("mob-settings").style.display = "none";
+  goHome(); toast("Logged out successfully", "s");
+};
+
+window.switchAuthTab = (tab) => {
+  document.querySelectorAll(".atab").forEach(t => t.classList.remove("on"));
+  document.getElementById("atab-" + tab).classList.add("on");
+  renderAuthForm(tab);
+};
+
+function renderAuthForm(mode) {
+  const isLogin = mode === "login";
+  document.getElementById("auth-form").innerHTML = `
+    ${!isLogin ? `<div class="aff"><label>FULL NAME</label><input id="a-name" type="text" placeholder="Your full name"></div>` : ""}
+    <div class="aff"><label>EMAIL ADDRESS</label><input id="a-email" type="email" placeholder="you@email.com"></div>
+    <div class="aff"><label>PASSWORD</label><input id="a-pass" type="password" placeholder="Password" onkeypress="if(event.key==='Enter')${isLogin ? 'doLogin()' : 'doSignup()'}"></div>
+    <button class="auth-btn" id="auth-submit-btn" onclick="${isLogin ? 'doLogin()' : 'doSignup()'}">
+      ${isLogin ? "LOGIN TO APEX &rarr;" : "CREATE ACCOUNT &rarr;"}
+    </button>
+    <div class="auth-demo">
+      Admin: <b>admin@apex.com</b> / <b>Apex@1234</b><br>
+      New here? Click SIGN UP above to register.
+    </div>`;
+}
+
+window.doLogin = async () => {
+  const email = document.getElementById("a-email").value.trim();
+  const pass  = document.getElementById("a-pass").value;
+  if (!email || !pass) return toast("Enter email and password", "e");
+  const btn = document.getElementById("auth-submit-btn");
+  if (btn) { btn.disabled = true; btn.textContent = "LOGGING IN..."; }
+  try {
+    const data = await api("POST", "/auth/login", { email, password: pass });
+    Auth.save(data);
+    currentUser = { email: data.email, displayName: data.name, uid: String(data.userId), role: data.role };
+    isAdmin = data.role === "ADMIN";
+    onLogin();
+    toast("Welcome back, " + data.name + "!", "s");
+    if (isAdmin) setTimeout(() => window.open("admin_final.html", "_blank"), 600);
+    showPage("vehicles");
+  } catch (e) {
+    toast(e.message || "Login failed. Check your credentials.", "e");
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "LOGIN TO APEX"; }
+  }
+};
+
+window.doSignup = async () => {
+  const name  = document.getElementById("a-name")?.value.trim() || "";
+  const email = document.getElementById("a-email").value.trim();
+  const pass  = document.getElementById("a-pass").value;
+  if (!name || !email || !pass) return toast("Please fill all fields", "e");
+  const btn = document.getElementById("auth-submit-btn");
+  if (btn) { btn.disabled = true; btn.textContent = "CREATING ACCOUNT..."; }
+  try {
+    const data = await api("POST", "/auth/register", { name, email, password: pass });
+    Auth.save(data);
+    currentUser = { email: data.email, displayName: data.name, uid: String(data.userId), role: data.role };
+    isAdmin = data.role === "ADMIN";
+    onLogin();
+    showPage("vehicles");
+    toast("Account created! Welcome to APEX.", "s");
+  } catch (e) {
+    toast(e.message || "Sign up failed. Email may already be registered.", "e");
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "CREATE ACCOUNT"; }
+  }
+};
+// ══ SLIDESHOW ══════════════════════════════════════════════════════════
+function initSlideshow(){
+  const ss=document.getElementById("slideshow");
+  const dots=document.getElementById("slide-dots");
+  ss.innerHTML=SLIDES.map((s,i)=>`
+    <div class="slide${i===0?" active":""}" id="sl-${i}">
+      <img src="${s.img}" alt="${s.make} ${s.model}" loading="${i<2?"eager":"lazy"}">
+      <div class="slide-overlay"></div>
+      <div class="slide-bottom-fade"></div>
+    </div>`).join("");
+  dots.innerHTML=SLIDES.map((_,i)=>`<div class="sdot${i===0?" active":""}" onclick="goSlide(${i})"></div>`).join("");
+  updateSlideInfo();
+  slideTimer=setInterval(()=>goSlide((slideIdx+1)%SLIDES.length),5500);
+}
+
+function updateSlideInfo(){
+  const s=SLIDES[slideIdx];
+  const lbl=document.getElementById("slide-label");
+  lbl.classList.add("fade");
+  setTimeout(()=>{
+    document.getElementById("sl-make").textContent=s.make;
+    document.getElementById("sl-model").textContent=s.model;
+    document.getElementById("sl-cat").textContent=s.cat;
+    document.getElementById("slide-num").textContent=String(slideIdx+1).padStart(2,"0");
+    lbl.classList.remove("fade");
+  },280);
+  document.querySelectorAll(".sdot").forEach((d,i)=>d.classList.toggle("active",i===slideIdx));
+}
+
+window.goSlide=(idx)=>{
+  document.getElementById("sl-"+slideIdx).classList.remove("active");
+  slideIdx=idx;
+  document.getElementById("sl-"+slideIdx).classList.add("active");
+  updateSlideInfo();
+  clearInterval(slideTimer);
+  slideTimer=setInterval(()=>goSlide((slideIdx+1)%SLIDES.length),5500);
+};
+
+// ══ MARQUEE ════════════════════════════════════════════════════════════
+function buildMarquee(){
+  const t=document.getElementById("marquee-track");
+  const items=[...BRANDS,...BRANDS].map(b=>`<div class="marquee-item">${b}</div>`).join("");
+  t.innerHTML=items;
+}
+
+// ══ FLEET PREVIEW ══════════════════════════════════════════════════════
+function buildFleetPreview(){
+  const featured=VEHICLES.filter(v=>v.avail).slice(0,6);
+  document.getElementById("fleet-preview-grid").innerHTML=featured.map(v=>`
+    <div class="fp-card" onclick="openBooking('${v.id}')">
+      <img src="${v.thumb}" alt="${v.make} ${v.model}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=80'">
+      <div class="fp-overlay">
+        <div class="fp-tag">${v.type==="motorcycle"?"MOTORCYCLE":"AUTOMOBILE"} · ${v.year}</div>
+        <div class="fp-name">${v.make} ${v.model}</div>
+        <div class="fp-price">From ₹${v.ph.toLocaleString()}/hr · ₹${v.pd.toLocaleString()}/day</div>
+      </div>
+      <div class="fp-hover"><button class="fp-hover-btn">RESERVE NOW</button></div>
+    </div>`).join("");
+}
+
+// ══ VEHICLES GRID ══════════════════════════════════════════════════════
+function renderVGrid(){
+  let list=[...VEHICLES];
+  if(filterType!=="all")list=list.filter(v=>v.type===filterType);
+  if(filterAvail==="yes")list=list.filter(v=>v.avail);
+  if(searchQ)list=list.filter(v=>(v.make+" "+v.model).toLowerCase().includes(searchQ));
+  if(filterSort==="price-asc")list.sort((a,b)=>a.pd-b.pd);
+  else if(filterSort==="price-desc")list.sort((a,b)=>b.pd-a.pd);
+  else list.sort((a,b)=>(a.make+a.model).localeCompare(b.make+b.model));
+  const g=document.getElementById("vgrid");
+  if(!list.length){g.innerHTML=`<div class="v-empty">No vehicles match your search. Try adjusting your filters.</div>`;return;}
+  g.innerHTML=list.map(v=>{
+    const isFav=favorites.includes(v.id);
+    return`<div class="vc ${!v.avail?"unavail":""}" ${v.avail?`onclick="openBooking('${v.id}')"`:""}>
+      <div class="vc-img">
+        <img src="${v.thumb}" alt="${v.make} ${v.model}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=80'">
+        <div class="vc-badge ${v.type}">${v.type==="motorcycle"?"MOTORCYCLE":"AUTOMOBILE"}</div>
+        ${!v.avail?'<div class="vc-maint">⚙ MAINTENANCE</div>':""}
+        <button class="vc-fav ${isFav?"on":""}" onclick="event.stopPropagation();toggleFav('${v.id}')" title="${isFav?"Remove from":"Add to"} favourites">
+          ${isFav?"❤":"🤍"}
+        </button>
+      </div>
+      <div class="vc-body">
+        <div class="vc-make">${v.make}</div>
+        <div class="vc-model">${v.model}</div>
+        <div class="vc-year">${v.year}</div>
+        <div class="vc-specs">
+          <span class="vc-spec">⚡ ${v.hp}hp</span>
+          <span class="vc-spec">🔄 ${v.trans}</span>
+          <span class="vc-spec">⛽ ${v.fuel}</span>
+          <span class="vc-spec">💺 ${v.seats}</span>
+        </div>
+        <div class="vc-pricing">
+          <div class="vp"><span class="vp-lbl">PER HOUR</span><span class="vp-val">₹${v.ph.toLocaleString()}</span></div>
+          <div class="vp-div"></div>
+          <div class="vp"><span class="vp-lbl">PER DAY</span><span class="vp-val">₹${v.pd.toLocaleString()}</span></div>
+        </div>
+        ${v.avail
+          ?`<button class="vc-btn" onclick="event.stopPropagation();openBooking('${v.id}')">RESERVE NOW →</button>`
+          :`<div class="vc-unavail">CURRENTLY UNAVAILABLE</div>`}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+window.setFilter=(el,group,val)=>{
+  if(group==="type")filterType=val;
+  else if(group==="avail")filterAvail=val;
+  else filterSort=val;
+  document.querySelectorAll(`.fb[data-g="${group}"]`).forEach(b=>b.classList.remove("on"));
+  el.classList.add("on");
+  renderVGrid();
+};
+
+window.setSearch=(q)=>{searchQ=q.toLowerCase();renderVGrid();};
+
+window.toggleFav=(id)=>{
+  const idx=favorites.indexOf(id);
+  if(idx===-1)favorites.push(id);else favorites.splice(idx,1);
+  localStorage.setItem("apex_favs",JSON.stringify(favorites));
+  renderVGrid();
+  toast(idx===-1?"Added to favourites ❤":"Removed from favourites","s");
+};
+
+// ══ PAGE ROUTING ═══════════════════════════════════════════════════════
+window.showPage=(page,sub)=>{
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const el=document.getElementById("page-"+page);
+  if(el)el.classList.add("active");
+  if(page==="settings"&&sub)switchSettings(sub);
+  if(page==="auth"&&sub)switchAuthTab(sub);
+  if(page==="vehicles")renderVGrid();
+  if(page==="about")renderAbout();
+  if(page==="reviews")renderReviews();
+  if(page==="locations")renderLocations();
+  window.scrollTo(0,0);
+};
+
+window.goHome=()=>{
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page-home").classList.add("active");
+  window.scrollTo(0,0);
+};
+
+window.scrollSec=(id)=>{
+  goHome();
+  setTimeout(()=>document.getElementById(id)?.scrollIntoView({behavior:"smooth"}),80);
+};
+
+window.toggleMobileNav=()=>document.getElementById("mobile-nav").classList.toggle("open");
+window.closeMobile=()=>document.getElementById("mobile-nav").classList.remove("open");
+
+// ══ SETTINGS ══════════════════════════════════════════════════════════
+window.switchSettings=(panel)=>{
+  document.querySelectorAll(".st-link").forEach(l=>l.classList.remove("on"));
+  document.getElementById("stl-"+panel)?.classList.add("on");
+  renderSettingsPanel(panel);
+};
+
+function renderSettingsPanel(panel){
+  if(panel!=="bookings") stopBookingPoller();
+  const main=document.getElementById("settings-main");
+  if(panel==="profile")main.innerHTML=buildProfilePanel();
+  else if(panel==="bookings")main.innerHTML=buildBookingsPanel();
+  else if(panel==="reminders")main.innerHTML=buildRemindersPanel();
+  else if(panel==="notifications")main.innerHTML=buildNotificationsPanel();
+  else if(panel==="appearance")main.innerHTML=buildAppearancePanel();
+  else if(panel==="preferences")main.innerHTML=buildPreferencesPanel();
+  else if(panel==="privacy")main.innerHTML=buildPrivacyPanel();
+  else if(panel==="help")main.innerHTML=buildHelpPanel();
+}
+
+function buildProfilePanel(){
+  const u=currentUser;
+  const name=profile.name||(u?.displayName)||"";
+  const email=profile.email||(u?.email)||"";
+  return`
+    <div class="st-section-title">MY PROFILE</div>
+    <p class="st-section-sub">Manage your personal information and account details</p>
+    <div class="profile-avatar" onclick="toast('Avatar upload coming soon','i')">
+      <span style="font-size:2rem">👤</span>
+      <div class="profile-avatar-edit">✏</div>
+    </div>
+    <div class="st-group">
+      <div class="st-group-title">PERSONAL INFORMATION</div>
+      <div class="profile-grid">
+        <div class="pf"><label>FULL NAME</label><input id="p-name" value="${name}" placeholder="Your full name"></div>
+        <div class="pf"><label>EMAIL</label><input id="p-email" type="email" value="${email}" placeholder="your@email.com"></div>
+        <div class="pf"><label>PHONE</label><input id="p-phone" type="tel" value="${profile.phone}" placeholder="+91 XXXXX XXXXX"></div>
+        <div class="pf"><label>DATE OF BIRTH</label><input id="p-dob" type="date" value="${profile.dob}"></div>
+        <div class="pf" style="grid-column:span 2"><label>ADDRESS</label><input id="p-addr" value="${profile.address}" placeholder="Your address"></div>
+        <div class="pf"><label>DRIVING LICENSE NO.</label><input id="p-lic" value="${profile.license}" placeholder="DL-XXXXXXXXXX"></div>
+        <div class="pf"><label>PREFERRED VEHICLE TYPE</label>
+          <select id="p-prefv">
+            <option value="">No preference</option>
+            <option value="car">Luxury Cars</option>
+            <option value="motorcycle">Motorcycles</option>
+            <option value="both">Both</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="save-btn" onclick="saveProfile()">SAVE CHANGES</button>
+      <button class="danger-btn" onclick="if(confirm('Log out of all devices?'))doLogout()">LOGOUT ALL DEVICES</button>
+    </div>`;
+}
+
+window.saveProfile=()=>{
+  profile.name=document.getElementById("p-name")?.value||"";
+  profile.email=document.getElementById("p-email")?.value||"";
+  profile.phone=document.getElementById("p-phone")?.value||"";
+  profile.dob=document.getElementById("p-dob")?.value||"";
+  profile.address=document.getElementById("p-addr")?.value||"";
+  profile.license=document.getElementById("p-lic")?.value||"";
+  if(currentUser)document.getElementById("nav-uname").textContent=(profile.name||currentUser.email.split("@")[0]).toUpperCase();
+  toast("Profile saved successfully ✓","s");
+};
+
+// ── Live booking status polling ────────────────────────────────
+let _bkPollTimer=null;
+let _lastBkSnapshot="";
+function startBookingPoller(){
+  stopBookingPoller();
+  _bkPollTimer=setInterval(()=>{
+    const snap=localStorage.getItem("apex_bookings")||"";
+    if(snap!==_lastBkSnapshot){
+      _lastBkSnapshot=snap;
+      // Check if any of my bookings changed status
+      const myBks=loadMyBookings();
+      const statusChanged=myBks.filter(b=>{
+        const prev=_prevStatuses[b.id];
+        return prev&&prev!==b.status;
+      });
+      statusChanged.forEach(b=>{
+        const icon=b.status==="approved"?"✅":"❌";
+        const msg=`${icon} Booking ${b.id} — ${b.vehicleName} has been ${b.status.toUpperCase()} by admin`;
+        toast(msg,b.status==="approved"?"s":"e");
+        // Also push to notifications
+        notifications.unshift({id:"n"+Date.now(),text:msg,time:"Just now",read:false});
+        updateNotifBadge();
+      });
+      myBks.forEach(b=>{_prevStatuses[b.id]=b.status;});
+      // Re-render the bookings panel if currently visible
+      const bkList=document.getElementById("my-bk-list");
+      if(bkList) refreshBookingsList();
+    }
+  },3000);
+}
+function stopBookingPoller(){ clearInterval(_bkPollTimer); }
+const _prevStatuses={};
+
+function refreshBookingsList() {
+  const bkList = document.getElementById("my-bk-list");
+  if (!bkList) return;
+  loadMyBookingsFromAPI().then(apiBks => {
+    const lsBks  = loadMyBookings();
+    const apiIds = new Set(apiBks.map(b => b.id));
+    const merged = [...apiBks, ...lsBks.filter(b => !apiIds.has(b.id))];
+    merged.forEach(b => {
+      const prev = _prevStatuses[b.id];
+      if (prev && prev !== b.status) {
+        const msg = "Booking " + b.id + " is now " + b.status.toUpperCase();
+        toast(msg, b.status === "approved" ? "s" : "e");
+        notifications.unshift({ id: "n" + Date.now(), text: msg, time: "Just now", read: false });
+        updateNotifBadge();
+      }
+      _prevStatuses[b.id] = b.status;
+    });
+    const existing = JSON.parse(localStorage.getItem("apex_bookings") || "[]");
+    existing.forEach(ex => {
+      const fresh = apiBks.find(a => a.id === (ex.id || ex.bookingId));
+      if (fresh) ex.status = fresh.status;
+    });
+    localStorage.setItem("apex_bookings", JSON.stringify(existing));
+    bkList.innerHTML = renderBookingCards(merged);
+  }).catch(() => bkList.innerHTML = renderBookingCards(loadMyBookings()));
+}
+
+function renderBookingCards(list) {
+  if (!list || !list.length) return `<div style="padding:40px;text-align:center;color:var(--text3);font-style:italic">No bookings yet. <span style="color:var(--gold);cursor:pointer" onclick="showPage('vehicles')">Browse fleet &rarr;</span></div>`;
+  return list.map(b => `
+    <div class="mb-card ${b.status}">
+      <div class="mb-head">
+        <span class="mb-id">${b.id || b.bookingId}</span>
+        <span class="mb-status ${b.status}">${(b.status || "PENDING").toUpperCase()}</span>
+      </div>
+      <div class="mb-vehicle">${b.vehicleName}</div>
+      <div class="mb-meta">${b.bookingType === "testdrive" ? "Test Drive" : "Rental"} &middot; ${b.date} ${b.slot ? "@ " + b.slot : ""} ${b.rentalDays ? b.rentalDays + " day(s)" : ""} &middot; <span style="color:var(--gold)">Rs.${(b.total || 0).toLocaleString()}</span></div>
+      ${b.status === "approved" ? `<div class="mb-approved-note">Confirmed by Admin</div>` : ""}
+      ${b.status === "rejected" ? `<div class="mb-rejected-note">Rejected by Admin</div>` : ""}
+    </div>`).join("");
+}
+function buildBookingsPanel() {
+  setTimeout(async () => {
+    const apiBks = await loadMyBookingsFromAPI();
+    const lsBks  = loadMyBookings();
+    const apiIds = new Set(apiBks.map(b => b.id));
+    const merged = [...apiBks, ...lsBks.filter(b => !apiIds.has(b.id))];
+    merged.forEach(b => { _prevStatuses[b.id] = b.status; });
+    const existing = JSON.parse(localStorage.getItem("apex_bookings") || "[]");
+    const exIds = new Set(existing.map(b => b.id || b.bookingId));
+    apiBks.forEach(b => { if (!exIds.has(b.id)) existing.unshift(b); });
+    existing.forEach(ex => {
+      const fresh = apiBks.find(a => a.id === (ex.id || ex.bookingId));
+      if (fresh) ex.status = fresh.status;
+    });
+    localStorage.setItem("apex_bookings", JSON.stringify(existing));
+    const el = document.getElementById("my-bk-list");
+    if (el) el.innerHTML = renderBookingCards(merged);
+  }, 200);
+
+  const lsBks = loadMyBookings();
+  lsBks.forEach(b => { _prevStatuses[b.id] = b.status; });
+  _lastBkSnapshot = localStorage.getItem("apex_bookings") || "";
+  startBookingPoller();
+  return `
+    <div class="st-section-title">MY BOOKINGS</div>
+    <p class="st-section-sub">Live from the database &mdash; synced every few seconds</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:18px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${["all","pending","approved","rejected"].map(s => `
+          <button class="fb" style="margin:0" onclick="filterMyBk('${s}',this)" data-bks="${s}">${s.toUpperCase()}</button>`).join("")}
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span id="bk-live-dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);animation:bkPulse 2s infinite"></span>
+        <span style="font-family:var(--fm);font-size:.55rem;color:var(--text3);letter-spacing:.1em">LIVE SYNC</span>
+        <button class="btn-s" style="font-size:.6rem;padding:6px 14px" onclick="refreshBookingsList();toast('Refreshed','s')">Refresh</button>
+      </div>
+    </div>
+    <style>@keyframes bkPulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
+    <div class="my-bookings-list" id="my-bk-list">
+      ${lsBks.length > 0 ? renderBookingCards(lsBks) : `<div style="padding:40px;text-align:center;color:var(--text3);font-style:italic">Loading from database...</div>`}
+    </div>`;
+}
+window.filterMyBk=(status,el)=>{
+  document.querySelectorAll("#my-bk-list .mb-card").forEach(c=>{
+    c.style.display=(status==="all"||c.classList.contains(status))?"block":"none";
+  });
+  el.closest(".settings-main").querySelectorAll(".fb").forEach(b=>b.classList.remove("on"));
+  el.classList.add("on");
+};
+
+function buildRemindersPanel(){
+  const active=reminders.filter(r=>!r.dismissed);
+  return`
+    <div class="st-section-title">REMINDERS</div>
+    <p class="st-section-sub">Upcoming bookings and alerts for your reservations</p>
+    <div class="reminder-list" id="rem-list">
+      ${active.map(r=>`
+        <div class="rem-card" id="rem-${r.id}">
+          <div class="rem-icon">${r.icon}</div>
+          <div style="flex:1">
+            <div class="rem-title">${r.title}</div>
+            <div class="rem-desc">${r.desc}</div>
+          </div>
+          <span class="rem-time">${r.time}</span>
+          <button class="rem-dismiss" onclick="dismissReminder('${r.id}')" title="Dismiss">✕</button>
+        </div>`).join("")||`<div style="padding:40px;text-align:center;color:var(--text3);font-style:italic">No active reminders</div>`}
+    </div>
+    <div class="add-reminder-form">
+      <div class="st-group-title">ADD REMINDER</div>
+      <div class="profile-grid">
+        <div class="pf"><label>TITLE</label><input id="rem-ttl" placeholder="e.g. Check booking status"></div>
+        <div class="pf"><label>DATE & TIME</label><input id="rem-dt" type="datetime-local"></div>
+        <div class="pf" style="grid-column:span 2"><label>DESCRIPTION</label><input id="rem-desc" placeholder="Reminder details…"></div>
+      </div>
+      <button class="save-btn" style="margin-top:14px" onclick="addReminder()">ADD REMINDER</button>
+    </div>`;
+}
+
+window.dismissReminder=(id)=>{
+  const r=reminders.find(r=>r.id===id);
+  if(r)r.dismissed=true;
+  localStorage.setItem("apex_reminders",JSON.stringify(reminders));
+  const el=document.getElementById("rem-"+id);
+  if(el){el.style.opacity="0";el.style.transform="translateX(20px)";el.style.transition="all .3s";setTimeout(()=>el.remove(),300);}
+  toast("Reminder dismissed","s");
+};
+
+window.addReminder=()=>{
+  const title=document.getElementById("rem-ttl")?.value.trim();
+  const dt=document.getElementById("rem-dt")?.value;
+  const desc=document.getElementById("rem-desc")?.value.trim();
+  if(!title)return toast("Enter a reminder title","e");
+  const r={id:"r"+Date.now(),title,desc:desc||"",time:dt?new Date(dt).toLocaleString("en-IN",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"Upcoming",icon:"⏰",dismissed:false};
+  reminders.push(r);
+  localStorage.setItem("apex_reminders",JSON.stringify(reminders));
+  renderSettingsPanel("reminders");
+  toast("Reminder added ✓","s");
+};
+
+function buildNotificationsPanel(){
+  const unread=notifications.filter(n=>!n.read).length;
+  return`
+    <div class="st-section-title">NOTIFICATIONS</div>
+    <p class="st-section-sub">${unread} unread notification${unread!==1?"s":""}</p>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+      <button class="btn-s" style="font-size:.58rem;padding:7px 16px" onclick="markAllRead()">MARK ALL READ</button>
+    </div>
+    <div>
+      ${notifications.map(n=>`
+        <div class="notif-card ${n.read?"":"unread"}" id="notif-${n.id}" onclick="markRead('${n.id}')">
+          <div class="notif-dot ${n.read?"read":""}"></div>
+          <div>
+            <div class="notif-text">${n.text}</div>
+            <div class="notif-time">${n.time}</div>
+          </div>
+        </div>`).join("")}
+    </div>`;
+}
+
+window.markRead=(id)=>{
+  const n=notifications.find(n=>n.id===id);
+  if(n){n.read=true;}
+  renderSettingsPanel("notifications");
+  updateNotifBadge();
+};
+
+window.markAllRead=()=>{
+  notifications.forEach(n=>n.read=true);
+  renderSettingsPanel("notifications");
+  updateNotifBadge();
+  toast("All notifications marked as read","s");
+};
+
+function updateNotifBadge(){
+  const cnt=notifications.filter(n=>!n.read).length;
+  const badge=document.getElementById("notif-badge");
+  if(badge){badge.textContent=cnt;badge.style.display=cnt>0?"flex":"none";}
+}
+
+function buildAppearancePanel(){
+  const theme=document.documentElement.getAttribute("data-theme")||"dark";
+  return`
+    <div class="st-section-title">APPEARANCE</div>
+    <p class="st-section-sub">Customise the look and feel of APEX</p>
+    <div class="st-group">
+      <div class="st-group-title">COLOR THEME</div>
+      <div class="theme-cards">
+        <div class="theme-card ${theme==="dark"?"active":""}" onclick="setTheme('dark')">
+          <div class="theme-card-icon">🌑</div>
+          <div class="theme-card-name">DARK MODE</div>
+          <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Deep black with gold accents</div>
+        </div>
+        <div class="theme-card ${theme==="light"?"active":""}" onclick="setTheme('light')">
+          <div class="theme-card-icon">☀️</div>
+          <div class="theme-card-name">LIGHT MODE</div>
+          <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Warm cream with gold accents</div>
+        </div>
+      </div>
+    </div>
+    <div class="st-group">
+      <div class="st-group-title">DISPLAY OPTIONS</div>
+      <div class="st-row">
+        <div class="st-row-left">
+          <div class="st-row-label">COMPACT VEHICLE CARDS</div>
+          <div class="st-row-desc">Show smaller cards to fit more vehicles on screen</div>
+        </div>
+        <button class="toggle" id="tog-compact" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="st-row">
+        <div class="st-row-left">
+          <div class="st-row-label">SHOW VEHICLE SPECS</div>
+          <div class="st-row-desc">Display hp, transmission and fuel details on cards</div>
+        </div>
+        <button class="toggle on" id="tog-specs" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="st-row">
+        <div class="st-row-left">
+          <div class="st-row-label">ANIMATE SLIDESHOW</div>
+          <div class="st-row-desc">Auto-advance hero slideshow on homepage</div>
+        </div>
+        <button class="toggle on" id="tog-slide" onclick="this.classList.toggle('on')"></button>
+      </div>
+    </div>`;
+}
+
+window.setTheme=(theme)=>{
+  document.documentElement.setAttribute("data-theme",theme);
+  localStorage.setItem("apex_theme",theme);
+  renderSettingsPanel("appearance");
+  toast(`${theme==="dark"?"Dark":"Light"} mode activated`,"s");
+};
+
+function buildPreferencesPanel(){
+  return`
+    <div class="st-section-title">PREFERENCES</div>
+    <p class="st-section-sub">Configure notification and booking preferences</p>
+    <div class="st-group">
+      <div class="st-group-title">NOTIFICATIONS</div>
+      ${[
+        {id:"emailNotif",label:"EMAIL NOTIFICATIONS",desc:"Receive booking confirmations and updates via email"},
+        {id:"smsNotif",label:"SMS ALERTS",desc:"Get SMS for booking status changes"},
+        {id:"pushNotif",label:"PUSH NOTIFICATIONS",desc:"Browser push notifications for real-time updates"},
+        {id:"newsletter",label:"NEWSLETTER",desc:"Monthly newsletter with new vehicles and offers"},
+      ].map(p=>`
+        <div class="st-row">
+          <div class="st-row-left">
+            <div class="st-row-label">${p.label}</div>
+            <div class="st-row-desc">${p.desc}</div>
+          </div>
+          <button class="toggle ${prefs[p.id]?"on":""}" id="pref-${p.id}" onclick="togglePref('${p.id}',this)"></button>
+        </div>`).join("")}
+    </div>
+    <div class="st-group">
+      <div class="st-group-title">BOOKING PREFERENCES</div>
+      ${[
+        {id:"autoReminder",label:"AUTO BOOKING REMINDERS",desc:"Automatically set reminders 24h before your booking"},
+        {id:"showPrices",label:"SHOW PRICES IN INR",desc:"Display all prices in Indian Rupees"},
+      ].map(p=>`
+        <div class="st-row">
+          <div class="st-row-left">
+            <div class="st-row-label">${p.label}</div>
+            <div class="st-row-desc">${p.desc}</div>
+          </div>
+          <button class="toggle ${prefs[p.id]?"on":""}" id="pref-${p.id}" onclick="togglePref('${p.id}',this)"></button>
+        </div>`).join("")}
+    </div>
+    <button class="save-btn" onclick="toast('Preferences saved ✓','s')">SAVE PREFERENCES</button>`;
+}
+
+window.togglePref=(key,el)=>{
+  el.classList.toggle("on");
+  prefs[key]=el.classList.contains("on");
+  toast(`${key.replace(/([A-Z])/g," $1").toUpperCase()} ${prefs[key]?"enabled":"disabled"}`,"s");
+};
+
+function buildPrivacyPanel(){
+  return`
+    <div class="st-section-title">PRIVACY & SECURITY</div>
+    <p class="st-section-sub">Control your data and account security</p>
+    <div class="st-group">
+      <div class="st-group-title">ACCOUNT SECURITY</div>
+      <div class="st-row">
+        <div class="st-row-left">
+          <div class="st-row-label">CHANGE PASSWORD</div>
+          <div class="st-row-desc">Update your account password</div>
+        </div>
+        <button class="btn-s" style="font-size:.58rem;padding:7px 16px" onclick="toast('Password reset email sent','s')">RESET PASSWORD</button>
+      </div>
+      <div class="st-row">
+        <div class="st-row-left">
+          <div class="st-row-label">TWO-FACTOR AUTHENTICATION</div>
+          <div class="st-row-desc">Add an extra layer of security to your account</div>
+        </div>
+        <button class="toggle" onclick="this.classList.toggle('on');toast('2FA setting updated','s')"></button>
+      </div>
+      <div class="st-row">
+        <div class="st-row-left">
+          <div class="st-row-label">LOGIN HISTORY</div>
+          <div class="st-row-desc">View recent sign-in activity</div>
+        </div>
+        <button class="btn-s" style="font-size:.58rem;padding:7px 16px" onclick="toast('Feature coming soon','i')">VIEW HISTORY</button>
+      </div>
+    </div>
+    <div class="st-group">
+      <div class="st-group-title">DATA & PRIVACY</div>
+      <div class="st-row">
+        <div class="st-row-left">
+          <div class="st-row-label">DOWNLOAD MY DATA</div>
+          <div class="st-row-desc">Export all your booking and account data</div>
+        </div>
+        <button class="btn-s" style="font-size:.58rem;padding:7px 16px" onclick="toast('Data export initiated. Check your email.','s')">EXPORT DATA</button>
+      </div>
+      <div class="st-row">
+        <div class="st-row-left">
+          <div class="st-row-label">CLEAR SEARCH HISTORY</div>
+          <div class="st-row-desc">Remove all saved searches and filters</div>
+        </div>
+        <button class="btn-s" style="font-size:.58rem;padding:7px 16px" onclick="localStorage.clear();toast('Data cleared','s')">CLEAR DATA</button>
+      </div>
+    </div>
+    <div class="st-group">
+      <div class="st-group-title" style="color:var(--red)">DANGER ZONE</div>
+      <div class="st-row">
+        <div class="st-row-left">
+          <div class="st-row-label" style="color:var(--red)">DELETE ACCOUNT</div>
+          <div class="st-row-desc">Permanently delete your account and all data. This cannot be undone.</div>
+        </div>
+        <button class="danger-btn" style="margin:0;padding:7px 14px;font-size:.58rem" onclick="if(confirm('Delete your account permanently?'))toast('Account deletion requested. You will be contacted.','e')">DELETE</button>
+      </div>
+    </div>`;
+}
+
+function buildHelpPanel(){
+  return`
+    <div class="st-section-title">HELP & SUPPORT</div>
+    <p class="st-section-sub">Get assistance with bookings, vehicles, and account issues</p>
+    <div class="st-group">
+      <div class="st-group-title">FREQUENTLY ASKED QUESTIONS</div>
+      ${[
+        {q:"How do I book a test drive?",a:"Browse our fleet, click RESERVE NOW on your chosen vehicle, select Test Drive, pick a date and time slot, upload your ID and confirm."},
+        {q:"What documents do I need?",a:"A valid driver's license or government-issued photo ID is required for all bookings. Upload it during the booking process."},
+        {q:"How long does approval take?",a:"Our admin team verifies your ID and approves bookings within 1–2 hours during business hours (9 AM – 6 PM)."},
+        {q:"Can I cancel a booking?",a:"Contact us at least 24 hours before your booking to cancel. Cancellations within 24 hours may incur a fee."},
+        {q:"What is the minimum rental period?",a:"Test drives are 1–2 hours. Rentals are available for a minimum of 1 day. Weekly rates offer a 7% discount."},
+      ].map(faq=>`
+        <div class="st-row" style="flex-direction:column;align-items:flex-start;gap:6px;cursor:pointer" onclick="this.querySelector('.faq-a').style.display=this.querySelector('.faq-a').style.display==='none'?'block':'none'">
+          <div class="st-row-label" style="display:flex;justify-content:space-between;width:100%">${faq.q} <span style="color:var(--gold)">▾</span></div>
+          <div class="faq-a st-row-desc" style="display:none;padding-top:4px;line-height:1.65">${faq.a}</div>
+        </div>`).join("")}
+    </div>
+    <div class="st-group">
+      <div class="st-group-title">CONTACT SUPPORT</div>
+      <div class="st-row"><div class="st-row-left"><div class="st-row-label">📞 PHONE</div><div class="st-row-desc">+91 98765 43210 · Mon–Sat 9 AM – 6 PM</div></div></div>
+      <div class="st-row"><div class="st-row-left"><div class="st-row-label">✉ EMAIL</div><div class="st-row-desc">support@apexvehicles.in · Response within 2 hours</div></div></div>
+      <div class="st-row"><div class="st-row-left"><div class="st-row-label">📍 SHOWROOM</div><div class="st-row-desc">APEX Premium Vehicles, Anna Salai, Chennai 600006</div></div></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="save-btn" onclick="toast('Opening chat support…','i')">💬 LIVE CHAT</button>
+      <button class="btn-s" onclick="window.open('mailto:support@apexvehicles.in')">✉ SEND EMAIL</button>
+    </div>`;
+}
+
+// ══ BOOKING MODAL ══════════════════════════════════════════════════════
+window.openBooking=(vid)=>{
+  if(!currentUser){showPage("auth","login");return toast("Please log in to book","e");}
+  selV=VEHICLES.find(v=>v.id===vid);
+  if(!selV||!selV.avail)return;
+  selDate=null;selSlot=null;uploadFile=null;uploadURL=null;
+  bookType="testdrive";rentalDur="daily";
+  document.getElementById("modal-overlay").classList.add("open");
+  document.body.style.overflow="hidden";
+  renderStep1();
+};
+
+window.closeModal=()=>{
+  document.getElementById("modal-overlay").classList.remove("open");
+  document.body.style.overflow="";
+};
+document.getElementById("modal-overlay").addEventListener("click",e=>{
+  if(e.target.id==="modal-overlay")closeModal();
+});
+
+function steps(current){
+  return`<div class="steps-row">
+    <div class="si ${current>=1?"done":"on"}">${current>1?"✓":"1"}</div>
+    <div class="sil ${current>1?"done":""}"></div>
+    <div class="si ${current===2?"on":current>2?"done":""}">${current>2?"✓":"2"}</div>
+    <div class="sil ${current>2?"done":""}"></div>
+    <div class="si ${current===3?"on":""}">3</div>
+  </div>`;
+}
+
+function renderStep1(){
+  const v=selV;
+  document.getElementById("modal-content").innerHTML=`
+    <div class="modal-head">
+      <div class="mvname">${v.make} <span>${v.model}</span></div>
+      ${steps(1)}
+    </div>
+    <div class="modal-body">
+      <div class="mlbl">SELECT BOOKING TYPE</div>
+      <div class="btype-grid">
+        <div class="btype on" id="bt-testdrive" onclick="selBType('testdrive')">
+          <div class="btype-icon">🏁</div>
+          <div class="btype-name">TEST DRIVE</div>
+          <div class="btype-desc">1–2 Hour Experience</div>
+          <div class="btype-price">₹${v.ph.toLocaleString()}/hr</div>
+        </div>
+        <div class="btype" id="bt-rental" onclick="selBType('rental')">
+          <div class="btype-icon">📅</div>
+          <div class="btype-name">RENTAL</div>
+          <div class="btype-desc">Daily or Weekly</div>
+          <div class="btype-price">₹${v.pd.toLocaleString()}/day</div>
+        </div>
+      </div>
+      <div class="mlbl" style="margin-top:18px">SELECT DATE</div>
+      <div id="cal-wrap"></div>
+      <div id="slots-area"></div>
+      <div id="rental-area" style="display:none;margin-top:16px">
+        <div class="mlbl">RENTAL DURATION</div>
+        <div class="dur-row">
+          <button class="dbtn on" id="db-daily" onclick="selDur('daily')">DAILY</button>
+          <button class="dbtn" id="db-weekly" onclick="selDur('weekly')">WEEKLY (7% OFF)</button>
+        </div>
+        <div class="days-row">
+          <label>DAYS:</label>
+          <input type="number" id="days-inp" class="days-inp" min="1" max="30" value="1" oninput="calcP()">
+          <span id="p-live" class="price-live"></span>
+          <span id="disc-tag" class="disc-tag" style="display:none"></span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-s" onclick="closeModal()">CANCEL</button>
+      <button class="btn-p" onclick="goStep2()">NEXT →</button>
+    </div>`;
+  initCal();
+}
+
+window.selBType=(t)=>{
+  bookType=t;
+  document.querySelectorAll(".btype").forEach(b=>b.classList.remove("on"));
+  document.getElementById("bt-"+t).classList.add("on");
+  document.getElementById("rental-area").style.display=t==="rental"?"block":"none";
+  if(t==="testdrive"&&selDate)renderSlots();
+  else document.getElementById("slots-area").innerHTML="";
+  if(t==="rental")calcP();
+};
+
+function initCal(){
+  const now=new Date();calY=now.getFullYear();calM=now.getMonth();
+  document.getElementById("cal-wrap").innerHTML=`
+    <div class="cal">
+      <div class="cal-hd">
+        <button onclick="prevM()">‹</button>
+        <span id="cal-lbl"></span>
+        <button onclick="nextM()">›</button>
+      </div>
+      <div class="cal-dow"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
+      <div id="cal-body"></div>
+    </div>`;
+  drawCal();
+}
+window.prevM=()=>{calM--;if(calM<0){calM=11;calY--;}drawCal();};
+window.nextM=()=>{calM++;if(calM>11){calM=0;calY++;}drawCal();};
+function drawCal(){
+  const MN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById("cal-lbl").textContent=`${MN[calM]} ${calY}`;
+  const today=new Date();today.setHours(0,0,0,0);
+  let sd=new Date(calY,calM,1).getDay();if(sd===0)sd=7;
+  const dim=new Date(calY,calM+1,0).getDate();
+  let h='<div class="cal-grid">';
+  for(let i=1;i<sd;i++)h+=`<div class="cday"></div>`;
+  for(let d=1;d<=dim;d++){
+    const dt=new Date(calY,calM,d);
+    const past=dt<today;
+    const ds=`${calY}-${String(calM+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    h+=`<div class="cday ${past?"past":"ok"}${selDate===ds?" sel":""}" ${!past?`onclick="pickDate('${ds}')"`:""}>${d}</div>`;
+  }
+  h+="</div>";
+  document.getElementById("cal-body").innerHTML=h;
+}
+window.pickDate=(ds)=>{selDate=ds;selSlot=null;drawCal();if(bookType==="testdrive")renderSlots();};
+async function renderSlots() {
+  const ALL = ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00"];
+  let takenSlots = [...TAKEN];
+  if (selV && selDate) {
+    try {
+      takenSlots = await api("GET", `/bookings/slots?vehicleId=${selV.id}&date=${selDate}`);
+    } catch (e) { console.warn("Could not fetch slots:", e.message); }
+  }
+  document.getElementById("slots-area").innerHTML = `
+    <div class="mlbl" style="margin-top:14px">SELECT TIME SLOT</div>
+    <div class="slots-grid">
+      ${ALL.map(s => {
+        const tk = takenSlots.includes(s), isSel = selSlot === s;
+        return `<div class="slot${tk?" taken":""}${isSel?" on":""}" ${tk?"":`onclick="pickSlot('${s}')"`}>
+          ${s}${tk ? "<br><small>Booked</small>" : ""}
+        </div>`;
+      }).join("")}
+    </div>
+    <p style="font-family:var(--fm);font-size:.58rem;color:var(--text3);margin-top:8px">Each slot is 1-2 hours</p>`;
+}
+window.pickSlot=(s)=>{selSlot=s;renderSlots();};
+window.selDur=(d)=>{rentalDur=d;document.querySelectorAll(".dbtn").forEach(b=>b.classList.remove("on"));document.getElementById("db-"+d).classList.add("on");calcP();};
+window.calcP=()=>{
+  const days=parseInt(document.getElementById("days-inp")?.value)||1;
+  const base=selV.pd*days;
+  const disc=rentalDur==="weekly"?Math.round(base*.07):0;
+  const tot=base-disc;
+  const pl=document.getElementById("p-live");if(pl)pl.textContent=`₹${tot.toLocaleString()}`;
+  const dt=document.getElementById("disc-tag");
+  if(dt){if(disc>0){dt.textContent=`-₹${disc.toLocaleString()}`;dt.style.display="inline";}else dt.style.display="none";}
+};
+window.goStep2=()=>{
+  if(!selDate)return toast("Please select a date","e");
+  if(bookType==="testdrive"&&!selSlot)return toast("Please select a time slot","e");
+  renderStep2();
+};
+
+function renderStep2(){
+  const v=selV;
+  const days=parseInt(document.getElementById("days-inp")?.value)||1;
+  document.getElementById("modal-content").innerHTML=`
+    <div class="modal-head">
+      <div class="mvname">${v.make} <span>${v.model}</span></div>
+      ${steps(2)}
+    </div>
+    <div class="modal-body">
+      <div class="summ-card" style="margin-bottom:18px">
+        <div class="srow"><span>Vehicle</span><strong>${v.make} ${v.model}</strong></div>
+        <div class="srow"><span>Type</span><strong>${bookType==="testdrive"?"🏁 Test Drive":"📅 Rental"}</strong></div>
+        <div class="srow"><span>Date</span><strong>${selDate}</strong></div>
+        ${bookType==="testdrive"?`<div class="srow"><span>Slot</span><strong>${selSlot} – ${addH(selSlot,2)}</strong></div>`
+          :`<div class="srow"><span>Duration</span><strong>${days} Day(s) · ${rentalDur}</strong></div>`}
+      </div>
+      <div class="mlbl">YOUR DETAILS</div>
+      <div class="fgrid">
+        <div class="ff"><label>FULL NAME *</label><input id="c-name" placeholder="As per ID" value="${profile.name||currentUser?.displayName||""}"></div>
+        <div class="ff"><label>PHONE *</label><input id="c-phone" type="tel" placeholder="+91 XXXXX XXXXX" value="${profile.phone||""}"></div>
+        <div class="ff"><label>EMAIL *</label><input id="c-email" type="email" value="${profile.email||currentUser?.email||""}"></div>
+        <div class="ff"><label>EMERGENCY CONTACT</label><input id="c-emg" type="tel" placeholder="Emergency number"></div>
+      </div>
+      <div class="mlbl" style="margin-top:18px">UPLOAD IDENTIFICATION *</div>
+      <div class="upload-zone" id="uz" onclick="document.getElementById('file-in').click()"
+           ondragover="event.preventDefault();this.classList.add('drag')"
+           ondragleave="this.classList.remove('drag')"
+           ondrop="dropFile(event)">
+        <input type="file" id="file-in" accept="image/*,.pdf" onchange="pickFile(event)" style="display:none">
+        <div class="uz-icon">📄</div>
+        <div class="uz-ttl">Driver's License or Government ID</div>
+        <div class="uz-sub">Click to browse or drag & drop · JPG, PNG, PDF</div>
+      </div>
+      <div id="up-prev"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-s" onclick="renderStep1()">← BACK</button>
+      <button class="btn-p" onclick="goStep3()">REVIEW →</button>
+    </div>`;
+}
+
+window.pickFile=(e)=>procFile(e.target.files[0]);
+window.dropFile=(e)=>{e.preventDefault();document.getElementById("uz").classList.remove("drag");procFile(e.dataTransfer.files[0]);};
+function procFile(file){
+  if(!file)return;
+  uploadFile=file;uploadURL=URL.createObjectURL(file);
+  const isImg=file.type.startsWith("image/");
+  document.getElementById("up-prev").innerHTML=`
+    <div class="up-prev" style="margin-top:10px">
+      ${isImg?`<img src="${uploadURL}" style="height:55px;border-radius:2px;object-fit:cover">`:`<span style="font-size:1.4rem">📄</span>`}
+      <div class="up-info">
+        <div class="up-name">${file.name}</div>
+        <div class="up-size">${(file.size/1024).toFixed(1)} KB · <span style="color:var(--green)">✓ Ready</span></div>
+      </div>
+      <button class="up-clr" onclick="clearUp()">✕</button>
+    </div>`;
+  document.getElementById("uz").style.display="none";
+}
+window.clearUp=()=>{uploadFile=null;uploadURL=null;document.getElementById("up-prev").innerHTML="";document.getElementById("uz").style.display="block";};
+
+window.goStep3=()=>{
+  const name=document.getElementById("c-name").value.trim();
+  const phone=document.getElementById("c-phone").value.trim();
+  const email=document.getElementById("c-email").value.trim();
+  if(!name||!phone||!email)return toast("Fill all required fields","e");
+  if(!uploadURL)return toast("Please upload your ID document","e");
+  renderStep3({name,phone,email,emg:document.getElementById("c-emg").value});
+};
+
+function renderStep3(cust){
+  const v=selV;
+  const days=parseInt(document.getElementById("days-inp")?.value)||1;
+  const total=bookType==="testdrive"?v.ph*2:Math.round(v.pd*days*(rentalDur==="weekly"?.93:1));
+  window._pendingCust=cust;window._pendingDays=days;window._pendingTotal=total;
+  document.getElementById("modal-content").innerHTML=`
+    <div class="modal-head">
+      <div class="mvname">${v.make} <span>${v.model}</span></div>
+      ${steps(3)}
+    </div>
+    <div class="modal-body">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-size:1.3rem;color:var(--gold);margin-bottom:6px">✦</div>
+        <div style="font-family:var(--fd);font-size:1.7rem;letter-spacing:.04em">Review Your Booking</div>
+        <div style="font-size:.85rem;color:var(--text3);font-style:italic">Verify all details before confirming</div>
+      </div>
+      <div class="summ-card">
+        <div class="srow"><span>Customer</span><strong>${cust.name}</strong></div>
+        <div class="srow"><span>Phone</span><strong>${cust.phone}</strong></div>
+        <div class="srow"><span>Vehicle</span><strong>${v.make} ${v.model} (${v.year})</strong></div>
+        <div class="srow"><span>Booking</span><strong>${bookType==="testdrive"?"🏁 Test Drive":"📅 Rental"}</strong></div>
+        <div class="srow"><span>Date</span><strong>${selDate}</strong></div>
+        ${bookType==="testdrive"
+          ?`<div class="srow"><span>Time</span><strong>${selSlot} – ${addH(selSlot,2)}</strong></div>`
+          :`<div class="srow"><span>Duration</span><strong>${days} Day(s)</strong></div>`}
+        <div class="srow tot"><span>Estimated Total</span><strong>₹${total.toLocaleString()}</strong></div>
+      </div>
+      <div class="notice">⏳ Booking will be <strong>PENDING</strong> until admin verifies your ID. Confirmation within 1–2 hours.</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-s" onclick="renderStep2()">← BACK</button>
+      <button class="btn-p" id="cfm-btn" onclick="confirmBooking()">CONFIRM BOOKING ✓</button>
+    </div>`;
+}
+
+window.confirmBooking = async () => {
+  const btn = document.getElementById("cfm-btn");
+  btn.disabled = true; btn.textContent = "Processing...";
+  const cust = window._pendingCust, days = window._pendingDays, total = window._pendingTotal;
+  if (!Auth.token()) { closeModal(); showPage("auth","login"); return toast("Please log in first","e"); }
+  try {
+    const bdata = await api("POST", "/bookings", {
+      vehicleId:   selV.id,
+      bookingType: bookType === "testdrive" ? "TESTDRIVE" : "RENTAL",
+      bookingDate: selDate,
+      timeSlot:    bookType === "testdrive" ? selSlot : null,
+      rentalDays:  bookType === "rental" ? days : null,
+      customerName: cust.name, customerPhone: cust.phone,
+      licenseUrl: uploadURL || ""
+    });
+    const ref = bdata.bookingRef || ("BK" + Date.now().toString(36).toUpperCase());
+    const saved = {
+      id: ref, bookingId: ref,
+      vehicleId: selV.id, vehicleName: selV.make + " " + selV.model,
+      bookingType: bookType, date: selDate,
+      slot: bookType === "testdrive" ? selSlot : null,
+      rentalDays: bookType === "rental" ? days : null,
+      total: bdata.totalPrice || total, status: "pending",
+      userEmail: currentUser.email, userId: currentUser.uid,
+      createdAt: new Date().toISOString()
+    };
+    try {
+      const ex = JSON.parse(localStorage.getItem("apex_bookings") || "[]");
+      ex.unshift(saved);
+      localStorage.setItem("apex_bookings", JSON.stringify(ex));
+    } catch {}
+    if (prefs.autoReminder) {
+      reminders.push({ id:"r"+Date.now(), title: selV.make+" "+selV.model+" Booking",
+        desc:"Your "+(bookType==="testdrive"?"test drive":"rental")+" on "+selDate+(selSlot?" at "+selSlot:""),
+        time:selDate, icon:"reminder", dismissed:false });
+      localStorage.setItem("apex_reminders", JSON.stringify(reminders));
+    }
+    showSuccess(ref, saved);
+  } catch (e) {
+    toast(e.message || "Booking failed. Please try again.", "e");
+    btn.disabled = false; btn.textContent = "CONFIRM BOOKING";
+  }
+};
+
+function showSuccess(id,b){
+  document.getElementById("modal-content").innerHTML=`
+    <div class="success-wrap">
+      <span class="succ-star">✦</span>
+      <div class="succ-ttl">Booking Submitted!</div>
+      <div class="bid-box">
+        <div class="bid-lbl">BOOKING ID</div>
+        <div class="bid-val">${id}</div>
+        <div class="bid-copy" onclick="navigator.clipboard.writeText('${id}');toast('Copied!','s')">📋 Copy to clipboard</div>
+      </div>
+      <div class="succ-details">
+        <div class="sd">🚗 ${b.vehicleName}</div>
+        <div class="sd">📅 ${b.date}${b.slot?" @ "+b.slot:""}</div>
+        <div class="sd">💰 ₹${b.total.toLocaleString()} estimated</div>
+        <div class="sd" style="color:var(--gold)">⏳ PENDING ADMIN APPROVAL</div>
+      </div>
+      <p style="color:var(--text3);font-size:.76rem;text-align:center;margin:10px 0 18px;font-family:var(--fm)">Our team verifies your ID and confirms within 1–2 hours.</p>
+      <div style="display:flex;gap:10px">
+        <button class="btn-p" style="flex:1" onclick="closeModal()">DONE</button>
+        <button class="btn-s" style="flex:1" onclick="closeModal();showPage('settings','bookings')">VIEW BOOKINGS</button>
+      </div>
+    </div>`;
+}
+
+// ══ HELPERS ═══════════════════════════════════════════════════════════
+function addH(t,h){const[hh,mm]=t.split(":").map(Number);return`${String(hh+h).padStart(2,"0")}:${String(mm).padStart(2,"0")}`;}
+function todayStr(){return new Date().toISOString().split("T")[0];}
+function yesterday(){const d=new Date();d.setDate(d.getDate()-1);return d.toISOString().split("T")[0];}
+
+// ── Sync vehicle availability set by admin ──────────────────────────────
+// ── Load bookings from Spring Boot / MySQL ────────────────────────────
+async function loadMyBookingsFromAPI() {
+  if (!Auth.token()) return [];
+  try {
+    const data = await api("GET", "/bookings/my");
+    return data.map(b => ({
+      id: b.bookingRef, bookingId: b.bookingRef,
+      vehicleName: (b.vehicle?.make || "Unknown") + " " + (b.vehicle?.model || ""),
+      vehicleId: b.vehicle?.id || "",
+      bookingType: b.bookingType === "TESTDRIVE" ? "testdrive" : "rental",
+      date: b.bookingDate, slot: b.timeSlot || "",
+      rentalDays: b.rentalDays, total: b.totalPrice,
+      status: (b.status || "PENDING").toLowerCase(),
+      userEmail: currentUser?.email || "", createdAt: b.createdAt
+    }));
+  } catch (e) { console.warn("loadMyBookingsFromAPI:", e.message); return []; }
+}
+
+function loadMyBookings() {
+  try {
+    const all = JSON.parse(localStorage.getItem("apex_bookings") || "[]");
+    if (!currentUser) return all;
+    return all.filter(b => b.userEmail === currentUser.email || b.userId === currentUser.uid || b.userId === "guest");
+  } catch { return []; }
+}
+
+window.toast=(msg,type="i")=>{
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.className=`toast show ${type}`;
+  clearTimeout(window._tt);
+  window._tt=setTimeout(()=>t.classList.remove("show"),3500);
+};
+
+// ══ ABOUT PAGE RENDERING is defined below ════════════════════════════════
+
+// ══ REVIEWS ══════════════════════════════════════════════════════════════
+let reviewStars=5;
+const REVIEWS=[
+  {name:"Arjun Mehta",city:"Chennai",vehicle:"BMW M5 Competition",type:"Test Drive",rating:5,date:"Jan 2024",text:"Absolutely breathtaking experience. The M5 is a beast — 625hp in your hands with expert guidance from the APEX team. The booking process was seamless and the staff were exceptionally professional.",avatar:"https://i.pravatar.cc/80?img=12"},
+  {name:"Priya Sharma",city:"Bangalore",vehicle:"Range Rover SVAutobiography",type:"Rental · 3 Days",rating:5,date:"Feb 2024",text:"Rented the Range Rover for a long weekend trip to Coorg. It was sheer luxury. The vehicle was immaculately maintained, full tank, every feature explained. Worth every rupee.",avatar:"https://i.pravatar.cc/80?img=47"},
+  {name:"Vikram Nair",city:"Mumbai",vehicle:"Harley-Davidson Fat Boy",type:"Test Drive",rating:5,date:"Mar 2024",text:"As a Harley enthusiast, I was skeptical — but the Fat Boy 114 is something else entirely. APEX had it in perfect condition and gave me a full 2-hour slot on the ECR. Epic.",avatar:"https://i.pravatar.cc/80?img=65"},
+  {name:"Sneha Patel",city:"Hyderabad",vehicle:"Mercedes AMG GT 63 S",type:"Test Drive",rating:4,date:"Mar 2024",text:"Stunning car and a great experience overall. Minor wait at pickup but the drive itself was extraordinary. The booking system is slick and the staff know their machines.",avatar:"https://i.pravatar.cc/80?img=39"},
+  {name:"Karthik Rajan",city:"Chennai",vehicle:"Triumph Speed Triple 1200 RS",type:"Rental · 2 Days",rating:5,date:"Apr 2024",text:"As someone who rides daily, this was a completely different league. The Speed Triple is raw, focused, and incredibly fast. APEX's ID verification process gave me confidence in their professionalism.",avatar:"https://i.pravatar.cc/80?img=52"},
+  {name:"Ananya Krishnan",city:"Pune",vehicle:"Maybach S680",type:"Test Drive",rating:5,date:"Apr 2024",text:"Never thought I would sit in a Maybach, let alone drive one. APEX made it possible. The cabin is unreal — it's like a private jet on wheels. This is what luxury means.",avatar:"https://i.pravatar.cc/80?img=29"},
+  {name:"Rahul Bose",city:"Delhi",vehicle:"Lamborghini Huracán EVO",type:"Test Drive",rating:5,date:"May 2024",text:"MIND BLOWING. The sound, the acceleration, the looks — everything. The APEX team were incredibly knowledgeable about the car. Already booked again for next month!",avatar:"https://i.pravatar.cc/80?img=15"},
+  {name:"Divya Menon",city:"Bangalore",vehicle:"Royal Enfield Super Meteor 650",type:"Rental · 1 Week",rating:4,date:"May 2024",text:"Perfect bike for a highway run. Smooth, comfortable and gorgeous. The weekly rental discount was a great deal. Only feedback: would love more colour options available.",avatar:"https://i.pravatar.cc/80?img=44"},
+  {name:"Sanjay Gupta",city:"Mumbai",vehicle:"Porsche 911 GT3 RS",type:"Test Drive",rating:5,date:"Jun 2024",text:"I've driven many cars but the 911 GT3 RS on a track layout at APEX was something transcendent. The team set up a short route through the ECR — absolutely perfect.",avatar:"https://i.pravatar.cc/80?img=68"},
+];
+
+window.renderReviews=()=>{
+  const pg=document.getElementById("page-reviews");
+  if(!pg)return;
+  const ratings=[72,18,7,2,1];// 5→1 star percentages
+  pg.innerHTML=`
+  <div style="padding-top:64px">
+    <div class="section" style="background:var(--bg2)">
+      <div class="sec-eye">CUSTOMER FEEDBACK</div>
+      <div class="sec-title">WHAT OUR <span style="color:var(--gold)">CLIENTS SAY</span></div>
+      <p class="sec-sub">Genuine reviews from verified customers who have experienced the APEX difference</p>
+      <div class="rating-overview">
+        <div class="ro-score">
+          <div class="ro-num">4.8</div>
+          <div class="ro-stars">${[1,2,3,4,5].map(i=>`<span style="font-size:.9rem;color:var(--gold)">★</span>`).join("")}</div>
+          <div class="ro-count">Based on ${REVIEWS.length}+ reviews</div>
+        </div>
+        <div class="ro-bars">
+          ${[5,4,3,2,1].map((s,i)=>`
+            <div class="rating-bar-row">
+              <div class="rb-lbl">${s}</div>
+              <div class="rb-track"><div class="rb-fill" style="width:${ratings[i]}%"></div></div>
+              <div class="rb-count">${ratings[i]}%</div>
+            </div>`).join("")}
+        </div>
+      </div>
+      <div class="reviews-grid">
+        ${REVIEWS.slice(0,6).map(r=>`
+          <div class="review-card">
+            <div class="rv-quote">"</div>
+            <div class="rv-stars">${[1,2,3,4,5].map(i=>`<span class="rv-star ${i>r.rating?"empty":""}">★</span>`).join("")}</div>
+            <div class="rv-text">${r.text}</div>
+            <div class="rv-author">
+              <img class="rv-avatar" src="${r.avatar}" alt="${r.name}" loading="lazy">
+              <div>
+                <div class="rv-name">${r.name}</div>
+                <div class="rv-vehicle">📍 ${r.city} · ${r.vehicle}</div>
+                <div class="rv-date">${r.type} · ${r.date}</div>
+                <div class="rv-verified">✓ Verified Customer</div>
+              </div>
+            </div>
+          </div>`).join("")}
+      </div>
+      <div id="more-reviews-container">
+        <div style="text-align:center;padding:28px 0">
+          <button class="btn-p" onclick="showAllReviews()" style="padding:12px 36px">LOAD MORE REVIEWS →</button>
+        </div>
+      </div>
+    </div>
+    <div class="section" style="background:var(--bg)">
+      <div class="sec-eye">SHARE YOUR EXPERIENCE</div>
+      <div class="sec-title">WRITE A <span style="color:var(--gold)">REVIEW</span></div>
+      <p class="sec-sub">Had an experience with APEX? We'd love to hear from you</p>
+      <div class="write-review-box">
+        <div style="font-family:var(--fm);font-size:.58rem;letter-spacing:.2em;color:var(--text3);margin-bottom:10px">YOUR RATING</div>
+        <div class="star-pick" id="star-pick">
+          ${[1,2,3,4,5].map(i=>`<span class="sp-star ${i<=reviewStars?"lit":""}" onclick="setReviewStar(${i})" onmouseover="hoverStar(${i})" onmouseout="unhoverStar()">★</span>`).join("")}
+        </div>
+        <div class="fgrid" style="margin-top:14px">
+          <div class="ff"><label>FULL NAME *</label><input id="rv-name" placeholder="Your name" value="${currentUser?.displayName||profile.name||""}"></div>
+          <div class="ff"><label>CITY</label><input id="rv-city" placeholder="e.g. Chennai"></div>
+          <div class="ff"><label>VEHICLE EXPERIENCED *</label>
+            <select id="rv-vehicle">
+              <option value="">Select vehicle…</option>
+              ${VEHICLES.map(v=>`<option>${v.make} ${v.model}</option>`).join("")}
+            </select>
+          </div>
+          <div class="ff"><label>BOOKING TYPE</label>
+            <select id="rv-type">
+              <option value="Test Drive">Test Drive</option>
+              <option value="Rental">Rental</option>
+            </select>
+          </div>
+        </div>
+        <div class="ff" style="margin-top:14px"><label>YOUR REVIEW *</label>
+          <textarea id="rv-text" placeholder="Share your experience with APEX…" rows="4" style="background:var(--input-bg);border:1px solid var(--input-border);color:var(--text);padding:10px 12px;resize:vertical;font-size:.88rem;width:100%;transition:border-color .2s;font-family:var(--fb)"></textarea>
+        </div>
+        <button class="btn-p" style="margin-top:14px" onclick="submitReview()">SUBMIT REVIEW →</button>
+      </div>
+    </div>
+  </div>`;
+};
+
+window.setReviewStar=(n)=>{reviewStars=n;refreshStars();};
+window.hoverStar=(n)=>{document.querySelectorAll(".sp-star").forEach((s,i)=>{s.classList.toggle("lit",i<n);});};
+window.unhoverStar=()=>refreshStars();
+function refreshStars(){document.querySelectorAll(".sp-star").forEach((s,i)=>{s.classList.toggle("lit",i<reviewStars);});}
+
+window.showAllReviews=()=>{
+  const c=document.getElementById("more-reviews-container");
+  const grid=c.previousElementSibling;
+  // Append remaining reviews
+  REVIEWS.slice(6).forEach(r=>{
+    const d=document.createElement("div");
+    d.className="review-card";
+    d.innerHTML=`<div class="rv-quote">"</div>
+      <div class="rv-stars">${[1,2,3,4,5].map(i=>`<span class="rv-star ${i>r.rating?"empty":""}">★</span>`).join("")}</div>
+      <div class="rv-text">${r.text}</div>
+      <div class="rv-author">
+        <img class="rv-avatar" src="${r.avatar}" alt="${r.name}" loading="lazy">
+        <div>
+          <div class="rv-name">${r.name}</div>
+          <div class="rv-vehicle">📍 ${r.city} · ${r.vehicle}</div>
+          <div class="rv-date">${r.type} · ${r.date}</div>
+          <div class="rv-verified">✓ Verified Customer</div>
+        </div>
+      </div>`;
+    grid.appendChild(d);
+  });
+  c.innerHTML="";
+};
+
+window.submitReview = async () => {
+  const name    = document.getElementById("rv-name")?.value.trim();
+  const text    = document.getElementById("rv-text")?.value.trim();
+  const vehicle = document.getElementById("rv-vehicle")?.value;
+  if (!name || !text || !vehicle) return toast("Please fill all required fields", "e");
+  if (!Auth.token()) return toast("Please log in to submit a review", "e");
+  const matchV   = window.VEHICLES.find(v => (v.make + " " + v.model) === vehicle);
+  const vehicleId = matchV ? matchV.id : null;
+  try {
+    await api("POST", "/reviews", { vehicleId, rating: reviewStars, comment: text });
+    toast("Review submitted! Thank you.", "s");
+  } catch (e) { toast(e.message || "Could not submit review", "e"); return; }
+  REVIEWS.unshift({
+    name, city: document.getElementById("rv-city")?.value || "India",
+    vehicle, type: document.getElementById("rv-type")?.value,
+    rating: reviewStars,
+    date: new Date().toLocaleDateString("en-IN", { month: "short", year: "numeric" }),
+    text, avatar: `https://i.pravatar.cc/80?img=${Math.floor(Math.random() * 70) + 1}`
+  });
+  setTimeout(() => renderReviews(), 500);
+};
+
+// ══ LOCATIONS PAGE ════════════════════════════════════════════════════════
+const LOCATIONS=[
+  {id:"l1",city:"CHENNAI",name:"APEX Anna Salai Flagship",addr:"No. 45, Anna Salai (Mount Road), Chennai 600006, Tamil Nadu",hours:"Mon–Sat 9:00 AM – 7:00 PM · Sun 10:00 AM – 5:00 PM",vehicles:18,lat:13.0604,lng:80.2496,tags:["FLAGSHIP","FULL FLEET"],phone:"+91 44 4567 8901"},
+  {id:"l2",city:"CHENNAI",name:"APEX OMR Tech Park",addr:"Plot 12, Sholinganallur Junction, Old Mahabalipuram Road, Chennai 600119",hours:"Mon–Sat 9:00 AM – 7:00 PM · Closed Sunday",vehicles:12,lat:12.9010,lng:80.2279,tags:["TEST DRIVE ONLY"],phone:"+91 44 4567 8902"},
+  {id:"l3",city:"BANGALORE",name:"APEX Indiranagar",addr:"100 Feet Road, Indiranagar, Bangalore 560038, Karnataka",hours:"Mon–Sat 9:00 AM – 8:00 PM · Sun 10:00 AM – 6:00 PM",vehicles:20,lat:12.9716,lng:77.6412,tags:["FLAGSHIP","FULL FLEET","BIKES"],phone:"+91 80 4567 8903"},
+  {id:"l4",city:"BANGALORE",name:"APEX Whitefield",addr:"ITPL Main Road, Whitefield, Bangalore 560066, Karnataka",hours:"Mon–Fri 9:00 AM – 7:00 PM · Sat–Sun 9:00 AM – 5:00 PM",vehicles:10,lat:12.9698,lng:77.7500,tags:["TEST DRIVE","RENTALS"],phone:"+91 80 4567 8904"},
+  {id:"l5",city:"MUMBAI",name:"APEX Bandra West",addr:"Linking Road, Bandra West, Mumbai 400050, Maharashtra",hours:"Mon–Sat 10:00 AM – 8:00 PM · Sun 11:00 AM – 6:00 PM",vehicles:15,lat:19.0596,lng:72.8295,tags:["FLAGSHIP","LUXURY CARS"],phone:"+91 22 4567 8905"},
+  {id:"l6",city:"MUMBAI",name:"APEX Powai",addr:"Hiranandani Gardens, Powai, Mumbai 400076, Maharashtra",hours:"Mon–Sat 9:00 AM – 7:00 PM · Sun Closed",vehicles:8,lat:19.1176,lng:72.9060,tags:["BIKES ONLY"],phone:"+91 22 4567 8906"},
+  {id:"l7",city:"DELHI",name:"APEX Connaught Place",addr:"N-Block, Connaught Place, New Delhi 110001",hours:"Mon–Sat 9:00 AM – 8:00 PM · Sun 10:00 AM – 5:00 PM",vehicles:14,lat:28.6315,lng:77.2167,tags:["FLAGSHIP","FULL FLEET"],phone:"+91 11 4567 8907"},
+  {id:"l8",city:"HYDERABAD",name:"APEX Jubilee Hills",addr:"Road No. 36, Jubilee Hills, Hyderabad 500033, Telangana",hours:"Mon–Sat 9:00 AM – 7:00 PM · Sun 10:00 AM – 4:00 PM",vehicles:11,lat:17.4326,lng:78.4071,tags:["CARS & BIKES"],phone:"+91 40 4567 8908"},
+  {id:"l9",city:"PUNE",name:"APEX Koregaon Park",addr:"Lane 7, Koregaon Park, Pune 411001, Maharashtra",hours:"Mon–Sat 9:30 AM – 7:30 PM · Sun 10:00 AM – 5:00 PM",vehicles:9,lat:18.5362,lng:73.8944,tags:["TEST DRIVE","RENTALS"],phone:"+91 20 4567 8909"},
+];
+
+let activeLocId="l1";
+
+window.renderLocations=()=>{
+  const pg=document.getElementById("page-locations");
+  if(!pg)return;
+  pg.innerHTML=`
+  <div style="padding-top:64px">
+    <!-- PICKUP PROCESS -->
+    <div class="section" style="background:var(--bg2)">
+      <div class="sec-eye">HOW YOU RECEIVE YOUR VEHICLE</div>
+      <div class="sec-title">LOCATION-BASED <span style="color:var(--gold)">PICKUP</span></div>
+      <p class="sec-sub">APEX operates on a <strong style="color:var(--gold)">location-based showroom pickup</strong> model — every vehicle is handpicked, inspected and delivered from our nearest certified showroom to your hands</p>
+      <div class="pickup-steps">
+        <div class="pickup-step">
+          <div class="ps-circle" data-num="1">📱</div>
+          <div class="ps-title">BOOK ONLINE</div>
+          <p class="ps-desc">Reserve your vehicle and slot through our platform. Select your preferred showroom location during checkout.</p>
+        </div>
+        <div class="pickup-step">
+          <div class="ps-circle" data-num="2">🆔</div>
+          <div class="ps-title">ADMIN VERIFIES</div>
+          <p class="ps-desc">Our team verifies your uploaded ID document within 1–2 hours and sends you a confirmation with showroom address.</p>
+        </div>
+        <div class="pickup-step">
+          <div class="ps-circle" data-num="3">📍</div>
+          <div class="ps-title">VISIT SHOWROOM</div>
+          <p class="ps-desc">Arrive at your selected APEX showroom on your booked date & time. Bring your original ID and booking confirmation.</p>
+        </div>
+        <div class="pickup-step">
+          <div class="ps-circle" data-num="4">🔑</div>
+          <div class="ps-title">KEYS IN HAND</div>
+          <p class="ps-desc">Sign the rental agreement, complete a quick vehicle walkthrough, and the keys are yours. Drive away in luxury.</p>
+        </div>
+      </div>
+      <div class="pickup-info-grid">
+        <div class="pi-card">
+          <div class="pi-tag">SELF-DRIVE</div>
+          <div class="pi-title">You Drive, You Choose</div>
+          <p class="pi-body">Every APEX booking is a <strong>self-drive experience</strong>. You are in complete control. No chauffeur, no escort — just you and the machine.</p>
+          <ul class="pi-list">
+            <li>Valid driver's license mandatory</li>
+            <li>Minimum age: 21 years (bikes: 18+)</li>
+            <li>Security deposit required at pickup</li>
+            <li>Fuel policy: return full tank</li>
+            <li>GPS included in every vehicle</li>
+          </ul>
+        </div>
+        <div class="pi-card">
+          <div class="pi-tag">HOME DELIVERY</div>
+          <div class="pi-title">We Come to You</div>
+          <p class="pi-body">For weekly rentals of ₹2000+/day, APEX offers <strong>premium doorstep delivery</strong> within a 20km radius of our showrooms.</p>
+          <ul class="pi-list">
+            <li>Available in Chennai, Bangalore, Mumbai & Delhi</li>
+            <li>Delivery charge: ₹500 flat per trip</li>
+            <li>Pre-booked slot required (2 hrs notice)</li>
+            <li>Vehicle delivered by APEX staff with briefing</li>
+            <li>WhatsApp confirmation + live tracking</li>
+          </ul>
+          <div class="delivery-badges">
+            <div class="db-badge"><div class="db-icon">🚚</div><div><div class="db-text">FREE DELIVERY</div><div class="db-sub">On 7+ day rentals</div></div></div>
+            <div class="db-badge"><div class="db-icon">📍</div><div><div class="db-text">20 KM RADIUS</div><div class="db-sub">From any showroom</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- LOCATIONS MAP -->
+    <div class="section" style="background:var(--bg)">
+      <div class="sec-eye">9 SHOWROOMS ACROSS INDIA</div>
+      <div class="sec-title">FIND YOUR <span style="color:var(--gold)">NEAREST APEX</span></div>
+      <p class="sec-sub">Select a showroom to explore its fleet availability, timings and get directions</p>
+      <div class="map-section">
+        <div class="map-sidebar">
+          <div class="ms-header">
+            <div class="ms-title">OUR SHOWROOMS</div>
+            <div class="ms-count">${LOCATIONS.length} locations across India</div>
+            <input class="loc-search" placeholder="🔍 Search city or showroom…" oninput="filterLocs(this.value)">
+          </div>
+          <div class="loc-list" id="loc-list">
+            ${LOCATIONS.map(l=>buildLocItem(l)).join("")}
+          </div>
+        </div>
+        <div id="apex-map">
+          <div class="map-loading" id="map-loading">
+            <div class="map-spin"></div>
+            LOADING MAP
+          </div>
+          <iframe class="map-osm" id="map-iframe" 
+            src="https://www.openstreetmap.org/export/embed.html?bbox=68,8,90,35&layer=mapnik&marker=13.0604,80.2496"
+            title="APEX Showroom Locations"
+            onload="document.getElementById('map-loading').style.display='none'"
+            style="display:none">
+          </iframe>
+        </div>
+      </div>
+      <div id="loc-detail-card" style="margin-top:16px"></div>
+    </div>
+  </div>`;
+  // Show iframe after short delay, reveal map
+  setTimeout(()=>{
+    const iframe=document.getElementById("map-iframe");
+    if(iframe){iframe.style.display="block";loadMapForLocation("l1");}
+  },300);
+  renderLocDetail("l1");
+};
+
+function buildLocItem(l){
+  return`<div class="loc-item ${l.id===activeLocId?"active":""}" id="loc-li-${l.id}" onclick="selectLoc('${l.id}')">
+    <div class="li-city">${l.city}</div>
+    <div class="li-name">${l.name}</div>
+    <div class="li-addr">${l.addr.split(",").slice(0,2).join(",")}</div>
+    <div class="li-meta">
+      ${l.tags.map(t=>`<span class="li-tag ${t==="FLAGSHIP"?"prem":""} ${t==="FULL FLEET"?"avail":""}">${t}</span>`).join("")}
+      <span class="li-tag avail">🚗 ${l.vehicles} vehicles</span>
+    </div>
+    <div class="li-hours">⏰ ${l.hours.split("·")[0].trim()}</div>
+  </div>`;
+}
+
+window.filterLocs=(q)=>{
+  const filtered=LOCATIONS.filter(l=>
+    l.name.toLowerCase().includes(q.toLowerCase())||
+    l.city.toLowerCase().includes(q.toLowerCase())||
+    l.addr.toLowerCase().includes(q.toLowerCase())
+  );
+  document.getElementById("loc-list").innerHTML=filtered.map(l=>buildLocItem(l)).join("")||`<div style="padding:24px;text-align:center;color:var(--text3);font-style:italic">No locations found</div>`;
+};
+
+window.selectLoc=(id)=>{
+  activeLocId=id;
+  document.querySelectorAll(".loc-item").forEach(el=>el.classList.remove("active"));
+  document.getElementById("loc-li-"+id)?.classList.add("active");
+  loadMapForLocation(id);
+  renderLocDetail(id);
+};
+
+function loadMapForLocation(id){
+  const l=LOCATIONS.find(l=>l.id===id);if(!l)return;
+  const iframe=document.getElementById("map-iframe");
+  if(!iframe)return;
+  const delta=0.05;
+  const bbox=`${l.lng-delta},${l.lat-delta},${l.lng+delta},${l.lat+delta}`;
+  iframe.src=`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${l.lat},${l.lng}`;
+  document.getElementById("map-loading").style.display="flex";
+  iframe.onload=()=>{document.getElementById("map-loading").style.display="none";};
+}
+
+function renderLocDetail(id){
+  const l=LOCATIONS.find(l=>l.id===id);if(!l)return;
+  const el=document.getElementById("loc-detail-card");if(!el)return;
+  el.innerHTML=`
+    <div style="background:var(--bg2);border:1px solid var(--border2);padding:24px;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:20px;align-items:start">
+      <div>
+        <div style="font-family:var(--fm);font-size:.55rem;letter-spacing:.2em;color:var(--gold);margin-bottom:6px">${l.city} SHOWROOM</div>
+        <div style="font-family:var(--fd);font-size:1.5rem;letter-spacing:.03em;margin-bottom:6px">${l.name}</div>
+        <div style="font-size:.85rem;color:var(--text3);line-height:1.6">${l.addr}</div>
+      </div>
+      <div>
+        <div style="font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(--text3);margin-bottom:8px">OPENING HOURS</div>
+        ${l.hours.split("·").map(h=>`<div style="font-size:.82rem;color:var(--text2);margin-bottom:3px">⏰ ${h.trim()}</div>`).join("")}
+      </div>
+      <div>
+        <div style="font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(--text3);margin-bottom:8px">CONTACT</div>
+        <div style="font-size:.85rem;color:var(--text2);margin-bottom:5px">📞 ${l.phone}</div>
+        <div style="font-size:.85rem;color:var(--text2);margin-bottom:5px">✉ info@apexvehicles.in</div>
+        <div style="font-family:var(--fm);font-size:.6rem;color:var(--green);margin-top:8px">🚗 ${l.vehicles} vehicles available</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn-p" onclick="window.open('https://www.google.com/maps/search/${encodeURIComponent(l.name+' '+l.addr)}','_blank')" style="white-space:nowrap;font-size:.6rem;padding:10px 18px">📍 GET DIRECTIONS</button>
+        <button class="btn-s" onclick="showPage('vehicles')" style="white-space:nowrap;font-size:.6rem;padding:10px 18px">🚗 BOOK HERE →</button>
+      </div>
+    </div>`;
+}
+
+// ══ ABOUT PAGE RENDERER ══════════════════════════════════════════════════
+window.renderAbout=()=>{
+  const pg=document.getElementById("page-about");
+  if(!pg)return;
+  pg.innerHTML=`
+  <div style="padding-top:64px">
+    <!-- HERO SPLIT -->
+    <div class="about-split">
+      <div class="about-img-col">
+        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=900&q=85" alt="APEX Showroom" loading="lazy">
+        <div class="about-img-overlay"></div>
+        <div class="about-img-badge">EST. 2019 · CHENNAI</div>
+      </div>
+      <div class="about-content-col">
+        <div class="sec-eye">WHO WE ARE</div>
+        <div class="sec-title" style="margin-bottom:16px">THE APEX <span style="color:var(--gold)">STORY</span></div>
+        <p style="font-size:1.05rem;color:var(--text2);line-height:1.85;margin-bottom:14px">APEX Premium Vehicles was founded in 2019 in Chennai with a single conviction — that every driving enthusiast deserves the chance to experience the world's finest machines, without the barrier of ownership.</p>
+        <p style="font-size:1.05rem;color:var(--text2);line-height:1.85;margin-bottom:14px">What began as a three-car showroom on Anna Salai has grown into India's premier premium vehicle reservation platform, with 9 showrooms across 6 cities and a curated fleet of 30+ luxury cars and performance motorcycles.</p>
+        <p style="font-size:1.05rem;color:var(--text2);line-height:1.85">From a first-time BMW test drive to a week-long Harley Davidson tour of the Himalayas — we make extraordinary automotive experiences accessible.</p>
+        <div class="about-stats">
+          <div class="about-stat"><div class="astat-num">9</div><div class="astat-lbl">SHOWROOMS</div></div>
+          <div class="about-stat"><div class="astat-num">30+</div><div class="astat-lbl">VEHICLES</div></div>
+          <div class="about-stat"><div class="astat-num">5K+</div><div class="astat-lbl">CUSTOMERS</div></div>
+          <div class="about-stat"><div class="astat-num">4.8★</div><div class="astat-lbl">RATING</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUR VALUES -->
+    <div class="section" style="background:var(--bg)">
+      <div class="sec-eye">WHAT DRIVES US</div>
+      <div class="sec-title">OUR <span style="color:var(--gold)">VALUES</span></div>
+      <p class="sec-sub">The principles behind every vehicle, every booking, every experience</p>
+      <div class="values-grid">
+        <div class="val-card"><div class="val-icon">✦</div><div class="val-title">UNCOMPROMISING QUALITY</div><p class="val-desc">Every vehicle in our fleet is professionally serviced, thoroughly inspected, and delivered to you in showroom condition — no exceptions.</p></div>
+        <div class="val-card"><div class="val-icon">🔐</div><div class="val-title">VERIFIED & TRUSTED</div><p class="val-desc">Our admin-verified booking system ensures every customer is authenticated, and every vehicle is in safe, licensed hands at all times.</p></div>
+        <div class="val-card"><div class="val-icon">🌟</div><div class="val-title">ACCESSIBLE EXCELLENCE</div><p class="val-desc">We believe luxury shouldn't require ownership. Our rental model puts Maybach, Porsche, and Harley Davidson within reach of every driving enthusiast.</p></div>
+        <div class="val-card"><div class="val-icon">📍</div><div class="val-title">LOCAL EXPERTISE</div><p class="val-desc">Each APEX showroom is staffed by passionate automotive experts who know every vehicle inside out — and the best local routes to experience them on.</p></div>
+        <div class="val-card"><div class="val-icon">🤝</div><div class="val-title">TRANSPARENT PRICING</div><p class="val-desc">No hidden fees. No surprise charges. Our hourly and daily rates are clear, and our weekly discount is automatic. What you see is what you pay.</p></div>
+        <div class="val-card"><div class="val-icon">⚡</div><div class="val-title">SEAMLESS EXPERIENCE</div><p class="val-desc">From online booking to key handover — every touchpoint is designed to be effortless, fast and worthy of the vehicles we represent.</p></div>
+      </div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="section" style="background:var(--bg2)">
+      <div class="sec-eye">THE PEOPLE BEHIND APEX</div>
+      <div class="sec-title">MEET THE <span style="color:var(--gold)">TEAM</span></div>
+      <p class="sec-sub">Passionate car and bike enthusiasts who turned their obsession into India's finest drive experience</p>
+      <div class="team-grid">
+        <div class="team-card">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80" alt="Aditya Menon" loading="lazy">
+          <div class="team-overlay">
+            <div class="team-name">Aditya Menon</div>
+            <div class="team-role">FOUNDER & CEO · CHENNAI</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80" alt="Kavitha Rajan" loading="lazy">
+          <div class="team-overlay">
+            <div class="team-name">Kavitha Rajan</div>
+            <div class="team-role">COO & OPERATIONS HEAD</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80" alt="Rohan Sharma" loading="lazy">
+          <div class="team-overlay">
+            <div class="team-name">Rohan Sharma</div>
+            <div class="team-role">FLEET DIRECTOR · BANGALORE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="section" style="background:var(--bg)">
+      <div class="sec-eye">OUR JOURNEY</div>
+      <div class="sec-title">THE APEX <span style="color:var(--gold)">TIMELINE</span></div>
+      <p class="sec-sub">Five years of building India's premium drive experience platform</p>
+      <div style="position:relative;padding-left:32px;border-left:1px solid rgba(201,168,76,.3)">
+        ${[
+          {year:"2019",event:"Founded in Chennai with 3 vehicles — one BMW, one Range Rover, one Triumph"},
+          {year:"2020",event:"Survived the pandemic by launching an online reservation system — a full year before competitors"},
+          {year:"2021",event:"Expanded to Bangalore. Crossed 500 verified customers. Added Harley-Davidson to the fleet"},
+          {year:"2022",event:"Launched motorcycle-exclusive showroom in Mumbai. Added Maybach and Lamborghini to select locations"},
+          {year:"2023",event:"Reached 9 showrooms across India. Launched home delivery for weekly rentals. 4.8★ average rating"},
+          {year:"2024",event:"Launched this digital reservation platform — APEX CRS — bringing seamless online bookings to all 9 locations"},
+        ].map(t=>`
+          <div style="position:relative;margin-bottom:32px;padding-left:20px">
+            <div style="position:absolute;left:-37px;top:4px;width:10px;height:10px;background:var(--gold);border-radius:50%;border:2px solid var(--bg)"></div>
+            <div style="font-family:var(--fd);font-size:1.4rem;color:var(--gold);letter-spacing:.06em">${t.year}</div>
+            <p style="font-size:.95rem;color:var(--text2);line-height:1.7;margin-top:4px">${t.event}</p>
+          </div>`).join("")}
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="background:var(--bg2);border-top:1px solid var(--border2);padding:80px;text-align:center">
+      <div style="font-family:var(--fm);font-size:.6rem;letter-spacing:.4em;color:var(--gold);margin-bottom:12px">READY TO EXPERIENCE IT?</div>
+      <div style="font-family:var(--fd);font-size:3.5rem;letter-spacing:.04em;margin-bottom:16px">DRIVE THE <span style="color:var(--gold)">ELITE.</span></div>
+      <p style="color:var(--text3);font-style:italic;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto;font-size:1rem">Join 5,000+ customers who have experienced the finest vehicles in India through APEX</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-p" style="padding:14px 40px;font-size:.72rem;letter-spacing:.16em" onclick="showPage('vehicles')">EXPLORE FLEET →</button>
+        <button class="btn-s" style="padding:14px 40px;font-size:.72rem;letter-spacing:.16em" onclick="showPage('locations')">FIND A SHOWROOM</button>
+      </div>
+    </div>
+  </div>`;
+};
+</script>
+</body>
+</html>
