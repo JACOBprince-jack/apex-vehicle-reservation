@@ -60,7 +60,8 @@ public class BookingService {
         b.setLicenseUrl(req.getLicenseUrl());
         b.setTotalPrice(calcPrice(type, vehicle, req.getRentalDays()));
         b.setStatus(Status.APPROVED);
-
+b.setPaymentMethod(req.getPaymentMethod() != null ? req.getPaymentMethod() : "Not Specified");
+b.setPaymentStatus(req.getPaymentStatus() != null ? req.getPaymentStatus() : "Pending");
         return bookingRepo.save(b);
     }
 

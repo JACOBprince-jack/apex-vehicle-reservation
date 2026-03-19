@@ -69,6 +69,11 @@ public class Booking {
 
     @Column(name = "admin_notes", length = 500)
     private String adminNotes;
+    @Column(name = "payment_method")
+private String paymentMethod;
+
+@Column(name = "payment_status")
+private String paymentStatus;
 
     public enum BookingType {
         TESTDRIVE, RENTAL

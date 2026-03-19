@@ -69,8 +69,10 @@ public class Dto {
         private String customerName;
         private String customerPhone;
         private String licenseUrl;
+         private String paymentMethod;
+        private String paymentStatus;
     }
-
+   
     @Data
     public static class BookingStatusUpdate {
         @NotNull private String status;           // APPROVED | REJECTED | COMPLETED
