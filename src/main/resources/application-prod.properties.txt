@@ -1,6 +1,5 @@
-
 server.port=${PORT:8080}
-spring.datasource.url=jdbc:mysql://mysql.railway.internal:3306/railway?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&connectTimeout=30000&socketTimeout=30000
+spring.datasource.url=jdbc:mysql://switchyard.proxy.rlwy.net:15362/railway?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
 spring.datasource.username=root
 spring.datasource.password=YhWgfpTunTbLstlADIOfdKomyjtIQGxq
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
