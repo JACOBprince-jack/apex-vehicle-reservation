@@ -864,7 +864,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80
 //  APEX — Spring Boot + MySQL Backend
 //  All auth, bookings and reviews connect to http://localhost:8080
 // ═══════════════════════════════════════════════════════════════════════
-const API = "http://localhost:8080/api";
+const API = window.location.hostname === "localhost" ? "http://localhost:8080/api" : "https://apex-vehicle-reservation-production.up.railway.app/api";
 
 
 const Auth = {
