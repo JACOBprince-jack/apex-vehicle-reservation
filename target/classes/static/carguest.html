@@ -311,7 +311,7 @@ nav{
 /* ══ BOOKING MODAL ════════════════════════════════════════════════════════ */
 #modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
 #modal-overlay.open{display:flex}
-.modal-box{background:var(--modal-bg);border:1px solid rgba(201,168,76,.25);width:100%;max-width:550px;margin:auto;position:relative}
+.modal-box{background:var(--modal-bg);border:1px solid rgba(201,168,76,.25);width:100%;max-width:660px;margin:auto;position:relative}
 .modal-x{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text3);font-size:1.1rem;z-index:10;width:30px;height:30px;display:flex;align-items:center;justify-content:center;transition:color .2s}
 .modal-x:hover{color:var(--gold)}
 .modal-head{padding:22px 26px 18px;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center}
@@ -586,55 +586,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80
 .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--text3);font-family:var(--fm);font-size:.68rem;letter-spacing:.1em}
 .map-spin{width:32px;height:32px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ══ PAYMENT STYLES ══════════════════════════════════════════════════════ */
-.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-.pay-method{border:1px solid var(--border2);padding:16px;cursor:pointer;transition:all .25s;background:var(--bg3);display:flex;align-items:center;gap:12px}
-.pay-method:hover,.pay-method.on{border-color:var(--gold);background:var(--gold-xs)}
-.pay-icon{font-size:1.6rem}
-.pay-name{font-family:var(--fd);font-size:1rem;letter-spacing:.04em}
-.pay-desc{font-size:.72rem;color:var(--text3);margin-top:2px}
-.pay-form{background:var(--bg3);border:1px solid var(--border2);padding:18px;margin-bottom:14px}
-.pay-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.pay-full{margin-bottom:10px}
-.pay-lbl{font-family:var(--fm);font-size:.54rem;letter-spacing:.14em;color:var(--text3);margin-bottom:4px}
-.pay-inp{width:100%;background:var(--input-bg);border:1px solid var(--input-border);color:var(--text);padding:9px 11px;font-size:.8rem;transition:border-color .2s;font-family:var(--fm)}
-.pay-inp:focus{outline:none;border-color:var(--gold)}
-.pay-secure{font-family:var(--fm);font-size:.58rem;color:var(--text3);text-align:center;margin-top:10px}
-.pay-success{text-align:center;padding:24px}
-.pay-tick{font-size:3rem;color:var(--green);display:block;margin-bottom:12px;animation:pulse 1s ease infinite alternate}
-.pay-ref{font-family:var(--fd);font-size:1.8rem;color:var(--gold);letter-spacing:.08em}
-.upi-input{display:flex;gap:8px;margin-bottom:14px}
-.upi-apps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-.upi-app{border:1px solid var(--border2);padding:10px 6px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg3)}
-.upi-app:hover,.upi-app.on{border-color:var(--gold);background:var(--gold-xs)}
-.upi-app-icon{font-size:1.4rem;margin-bottom:4px}
-.upi-app-name{font-family:var(--fm);font-size:.52rem;color:var(--text3)}
-
-/* ══ ORDER HISTORY STYLES ════════════════════════════════════════════════ */
-.oh-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-.oh-card{background:var(--bg3);border:1px solid var(--border2);margin-bottom:12px;overflow:hidden;transition:border-color .3s}
-.oh-card:hover{border-color:rgba(201,168,76,.35)}
-.oh-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border)}
-.oh-ref{font-family:var(--fd);font-size:1.2rem;letter-spacing:.04em;color:var(--gold)}
-.oh-status{font-family:var(--fm);font-size:.55rem;letter-spacing:.14em;padding:4px 10px;border-radius:2px}
-.oh-status.pending{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.3)}
-.oh-status.approved{background:rgba(74,222,128,.12);color:var(--green);border:1px solid rgba(74,222,128,.3)}
-.oh-status.rejected{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)}
-.oh-status.completed{background:rgba(96,165,250,.12);color:var(--blue);border:1px solid rgba(96,165,250,.3)}
-.oh-status.cancelled{background:rgba(122,114,104,.12);color:var(--text3);border:1px solid var(--border2)}
-.oh-body{padding:14px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-.oh-field label{font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;color:var(--text3);display:block;margin-bottom:3px}
-.oh-field span{font-size:.88rem;color:var(--text)}
-.oh-foot{padding:10px 18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--bg2)}
-.oh-total{font-family:var(--fd);font-size:1.3rem;color:var(--gold)}
-.oh-pay-badge{font-family:var(--fm);font-size:.52rem;padding:3px 8px;background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.25)}
-.oh-empty{padding:60px;text-align:center;color:var(--text3);font-style:italic}
-.oh-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:24px}
-.oh-stat{background:var(--bg3);border:1px solid var(--border2);padding:16px;text-align:center}
-.oh-stat-num{font-family:var(--fd);font-size:1.8rem;color:var(--gold)}
-.oh-stat-lbl{font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;color:var(--text3);margin-top:4px}
-
 </style>
 </head>
 <body>
@@ -648,7 +599,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80
     <span class="nav-link" onclick="showPage('about')">ABOUT</span>
     <span class="nav-link" onclick="showPage('locations')">LOCATIONS</span>
     <span class="nav-link" onclick="showPage('reviews')">REVIEWS</span>
-    
+    <span class="nav-link" onclick="scrollSec('how-it-works')">HOW IT WORKS</span>
   </div>
   <div class="nav-actions">
     <div id="nav-guest" style="display:flex;gap:8px">
@@ -722,7 +673,18 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80
     </div>
   </section>
 
-  
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works" style="background:var(--bg2)">
+    <div class="sec-eye">THE PROCESS</div>
+    <div class="sec-title">HOW IT <span style="color:var(--gold)">WORKS</span></div>
+    <p class="sec-sub">Four steps to your premium driving experience</p>
+    <div class="steps-grid">
+      <div class="step-card"><div class="step-num">01</div><div class="step-icon">🔐</div><div class="step-title">CREATE ACCOUNT</div><p class="step-desc">Sign up in seconds. Secure Firebase authentication protects your data.</p></div>
+      <div class="step-card"><div class="step-num">02</div><div class="step-icon">🚗</div><div class="step-title">CHOOSE VEHICLE</div><p class="step-desc">Browse 30+ luxury cars and premium motorcycles. Filter, search, and compare.</p></div>
+      <div class="step-card"><div class="step-num">03</div><div class="step-icon">📅</div><div class="step-title">PICK DATE & SLOT</div><p class="step-desc">Dynamic calendar shows real availability. Choose test drive or rental duration.</p></div>
+      <div class="step-card"><div class="step-num">04</div><div class="step-icon">✦</div><div class="step-title">CONFIRM & DRIVE</div><p class="step-desc">Upload your ID. Admin verifies it and approves. Unique booking ID generated instantly.</p></div>
+    </div>
+  </section>
 
   <!-- FOOTER -->
   <footer>
@@ -735,9 +697,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80
         <div class="ft-col-hd">NAVIGATE</div>
         <span class="ft-lnk" onclick="goHome()">Home</span>
         <span class="ft-lnk" onclick="showPage('vehicles')">Fleet</span>
+        <span class="ft-lnk" onclick="showPage('about')">About Us</span>
         <span class="ft-lnk" onclick="showPage('locations')">Locations & Map</span>
         <span class="ft-lnk" onclick="showPage('reviews')">Reviews</span>
-        <span class="ft-lnk" onclick="showPage('about')">About Us</span>
         <span class="ft-lnk" onclick="showPage('auth','signup')">Book Now</span>
         <span class="ft-lnk" onclick="showPage('settings','profile')">My Account</span>
       </div>
@@ -825,8 +787,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80
         <div class="st-link" id="stl-notifications" onclick="switchSettings('notifications')"><span class="st-icon">🔔</span>NOTIFICATIONS</div>
         <div class="st-link" id="stl-appearance" onclick="switchSettings('appearance')"><span class="st-icon">🎨</span>APPEARANCE</div>
         <div class="st-link" id="stl-preferences" onclick="switchSettings('preferences')"><span class="st-icon">⚙</span>PREFERENCES</div>
-        <div class="st-link" id="stl-payment" onclick="switchSettings('payment')"><span class="st-icon">💳</span>PAYMENT</div>
-        <div class="st-link" id="stl-orderhistory" onclick="switchSettings('orderhistory')"><span class="st-icon">📦</span>ORDER HISTORY</div>
         <div class="st-link" id="stl-privacy" onclick="switchSettings('privacy')"><span class="st-icon">🔒</span>PRIVACY</div>
         <div class="st-link" id="stl-help" onclick="switchSettings('help')"><span class="st-icon">❓</span>HELP</div>
       </div>
@@ -865,7 +825,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80
 //  All auth, bookings and reviews connect to http://localhost:8080
 // ═══════════════════════════════════════════════════════════════════════
 const API = "http://localhost:8080/api";
-
+const ADMIN_EMAILS = ["admin@apex.com","dealer@apex.com"];
 
 const Auth = {
   token:   () => localStorage.getItem("apex_token"),
@@ -1226,6 +1186,7 @@ function renderAuthForm(mode) {
       ${isLogin ? "LOGIN TO APEX &rarr;" : "CREATE ACCOUNT &rarr;"}
     </button>
     <div class="auth-demo">
+      Admin: <b>admin@apex.com</b> / <b>Apex@1234</b><br>
       New here? Click SIGN UP above to register.
     </div>`;
 }
@@ -1441,8 +1402,6 @@ function renderSettingsPanel(panel){
   else if(panel==="notifications")main.innerHTML=buildNotificationsPanel();
   else if(panel==="appearance")main.innerHTML=buildAppearancePanel();
   else if(panel==="preferences")main.innerHTML=buildPreferencesPanel();
-  else if(panel==="payment")main.innerHTML=buildPaymentPanel();
-  else if(panel==="orderhistory"){main.innerHTML=buildOrderHistoryPanel();loadOrderHistory();}
   else if(panel==="privacy")main.innerHTML=buildPrivacyPanel();
   else if(panel==="help")main.innerHTML=buildHelpPanel();
 }
@@ -1916,9 +1875,7 @@ function steps(current){
     <div class="sil ${current>1?"done":""}"></div>
     <div class="si ${current===2?"on":current>2?"done":""}">${current>2?"✓":"2"}</div>
     <div class="sil ${current>2?"done":""}"></div>
-    <div class="si ${current===3?"on":current>3?"done":""}">${current>3?"✓":"3"}</div>
-    <div class="sil ${current>3?"done":""}"></div>
-    <div class="si ${current===4?"on":""}">4</div>
+    <div class="si ${current===3?"on":""}">3</div>
   </div>`;
 }
 
@@ -2037,6 +1994,7 @@ window.pickSlot=(s)=>{selSlot=s;renderSlots();};
 window.selDur=(d)=>{rentalDur=d;document.querySelectorAll(".dbtn").forEach(b=>b.classList.remove("on"));document.getElementById("db-"+d).classList.add("on");calcP();};
 window.calcP=()=>{
   const days=parseInt(document.getElementById("days-inp")?.value)||1;
+  window._rentalDays=days; // save for use in Step 3
   const base=selV.pd*days;
   const disc=rentalDur==="weekly"?Math.round(base*.07):0;
   const tot=base-disc;
@@ -2047,12 +2005,15 @@ window.calcP=()=>{
 window.goStep2=()=>{
   if(!selDate)return toast("Please select a date","e");
   if(bookType==="testdrive"&&!selSlot)return toast("Please select a time slot","e");
+  // Save rental days before leaving Step 1
+  window._rentalDays = parseInt(document.getElementById("days-inp")?.value)||1;
   renderStep2();
 };
 
 function renderStep2(){
   const v=selV;
-  const days=parseInt(document.getElementById("days-inp")?.value)||1;
+  const days=bookType==="rental"?(parseInt(document.getElementById("days-inp")?.value)||window._rentalDays||1):1;
+  window._rentalDays=days; // save current days
   document.getElementById("modal-content").innerHTML=`
     <div class="modal-head">
       <div class="mvname">${v.make} <span>${v.model}</span></div>
@@ -2121,7 +2082,7 @@ window.goStep3=()=>{
 
 function renderStep3(cust){
   const v=selV;
-  const days=parseInt(document.getElementById("days-inp")?.value)||1;
+  const days=bookType==="rental"?(window._rentalDays||1):1;
   const total=bookType==="testdrive"?v.ph*2:Math.round(v.pd*days*(rentalDur==="weekly"?.93:1));
   window._pendingCust=cust;window._pendingDays=days;window._pendingTotal=total;
   document.getElementById("modal-content").innerHTML=`
@@ -2150,7 +2111,7 @@ function renderStep3(cust){
     </div>
     <div class="modal-foot">
       <button class="btn-s" onclick="renderStep2()">← BACK</button>
-      <button class="btn-p" onclick="renderStep4()">PROCEED TO PAYMENT →</button>
+      <button class="btn-p" id="cfm-btn" onclick="confirmBooking()">CONFIRM BOOKING ✓</button>
     </div>`;
 }
 
@@ -2167,9 +2128,7 @@ window.confirmBooking = async () => {
       timeSlot:    bookType === "testdrive" ? selSlot : null,
       rentalDays:  bookType === "rental" ? days : null,
       customerName: cust.name, customerPhone: cust.phone,
-      licenseUrl: uploadURL || "",
-paymentMethod: document.querySelector(".pay-method.on .pay-name")?.textContent || "Not Specified",
-paymentStatus: selPayMethod === "cod" ? "Pay at Showroom" : "Paid"
+      licenseUrl: uploadURL || ""
     });
     const ref = bdata.bookingRef || ("BK" + Date.now().toString(36).toUpperCase());
     const saved = {
@@ -2199,354 +2158,6 @@ paymentStatus: selPayMethod === "cod" ? "Pay at Showroom" : "Paid"
     btn.disabled = false; btn.textContent = "CONFIRM BOOKING";
   }
 };
-
-// ══ STEP 4 — PAYMENT ══════════════════════════════════════════════════
-let selPayMethod = "card";
-
-function renderStep4() {
-  const v = selV;
-  const total = window._pendingTotal;
-  document.getElementById("modal-content").innerHTML = `
-    <div class="modal-head">
-      <div class="mvname">${v.make} <span>${v.model}</span></div>
-      ${steps(4)}
-    </div>
-    <div class="modal-body">
-      <div style="text-align:center;margin-bottom:18px">
-        <div style="font-family:var(--fd);font-size:1.5rem;letter-spacing:.04em">PAYMENT</div>
-        <div style="font-size:.82rem;color:var(--text3);font-style:italic">Total: <span style="color:var(--gold);font-family:var(--fd);font-size:1.1rem">Rs.${total.toLocaleString()}</span></div>
-      </div>
-      <div class="mlbl">SELECT PAYMENT METHOD</div>
-      <div class="pay-methods">
-        <div class="pay-method on" id="pm-card" onclick="selectPayMethod('card')">
-          <div class="pay-icon">💳</div>
-          <div><div class="pay-name">CREDIT / DEBIT CARD</div><div class="pay-desc">Visa, Mastercard, Rupay</div></div>
-        </div>
-        <div class="pay-method" id="pm-upi" onclick="selectPayMethod('upi')">
-          <div class="pay-icon">📱</div>
-          <div><div class="pay-name">UPI</div><div class="pay-desc">GPay, PhonePe, Paytm</div></div>
-        </div>
-        <div class="pay-method" id="pm-netbanking" onclick="selectPayMethod('netbanking')">
-          <div class="pay-icon">🏦</div>
-          <div><div class="pay-name">NET BANKING</div><div class="pay-desc">All major banks</div></div>
-        </div>
-        <div class="pay-method" id="pm-cod" onclick="selectPayMethod('cod')">
-          <div class="pay-icon">💵</div>
-          <div><div class="pay-name">PAY AT SHOWROOM</div><div class="pay-desc">Cash on pickup</div></div>
-        </div>
-      </div>
-      <div id="pay-form-area">${buildCardForm()}</div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn-s" onclick="renderStep3(window._pendingCust)">← BACK</button>
-      <button class="btn-p" id="cfm-btn" onclick="processPayment()">PAY Rs.${total.toLocaleString()} ✓</button>
-    </div>`;
-}
-
-window.selectPayMethod = (method) => {
-  selPayMethod = method;
-  document.querySelectorAll(".pay-method").forEach(m => m.classList.remove("on"));
-  document.getElementById("pm-" + method).classList.add("on");
-  const area = document.getElementById("pay-form-area");
-  const total = window._pendingTotal;
-  if (method === "card")        area.innerHTML = buildCardForm();
-  else if (method === "upi")    area.innerHTML = buildUPIForm();
-  else if (method === "netbanking") area.innerHTML = buildNetBankingForm();
-  else if (method === "cod")    area.innerHTML = buildCODForm();
-  const btn = document.getElementById("cfm-btn");
-  if (btn) btn.textContent = method === "cod" ? "CONFIRM BOOKING ✓" : "PAY Rs." + (total||0).toLocaleString() + " ✓";
-};
-
-function buildCardForm() {
-  return `<div class="pay-form">
-    <div class="pay-full"><div class="pay-lbl">CARDHOLDER NAME</div><input class="pay-inp" id="card-name" placeholder="Name on card" value="${window._pendingCust?.name||''}"></div>
-    <div class="pay-full"><div class="pay-lbl">CARD NUMBER</div><input class="pay-inp" id="card-num" placeholder="1234 5678 9012 3456" maxlength="19" oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(.{4})/g,'$1 ').trim()"></div>
-    <div class="pay-row">
-      <div><div class="pay-lbl">EXPIRY DATE</div><input class="pay-inp" id="card-exp" placeholder="MM/YY" maxlength="5" oninput="if(this.value.length===2&&!this.value.includes('/'))this.value+='/'"></div>
-      <div><div class="pay-lbl">CVV</div><input class="pay-inp" id="card-cvv" placeholder="123" maxlength="3" type="password"></div>
-    </div>
-    <div class="pay-secure">🔒 Your payment is 256-bit SSL encrypted and secure</div>
-  </div>`;
-}
-
-function buildUPIForm() {
-  return `<div class="pay-form">
-    <div class="mlbl" style="margin-bottom:10px">SELECT UPI APP</div>
-    <div class="upi-apps">
-      <div class="upi-app on" onclick="document.querySelectorAll('.upi-app').forEach(a=>a.classList.remove('on'));this.classList.add('on')">
-        <div class="upi-app-icon">G</div><div class="upi-app-name">Google Pay</div>
-      </div>
-      <div class="upi-app" onclick="document.querySelectorAll('.upi-app').forEach(a=>a.classList.remove('on'));this.classList.add('on')">
-        <div class="upi-app-icon">P</div><div class="upi-app-name">PhonePe</div>
-      </div>
-      <div class="upi-app" onclick="document.querySelectorAll('.upi-app').forEach(a=>a.classList.remove('on'));this.classList.add('on')">
-        <div class="upi-app-icon">P</div><div class="upi-app-name">Paytm</div>
-      </div>
-      <div class="upi-app" onclick="document.querySelectorAll('.upi-app').forEach(a=>a.classList.remove('on'));this.classList.add('on')">
-        <div class="upi-app-icon">B</div><div class="upi-app-name">BHIM</div>
-      </div>
-    </div>
-    <div class="pay-full"><div class="pay-lbl">OR ENTER UPI ID</div>
-      <div class="upi-input"><input class="pay-inp" id="upi-id" placeholder="yourname@upi" style="flex:1"><button class="btn-s" style="font-size:.6rem;padding:9px 14px;white-space:nowrap" onclick="toast('UPI ID verified','s')">VERIFY</button></div>
-    </div>
-    <div class="pay-secure">🔒 UPI payments are instant and secure via NPCI</div>
-  </div>`;
-}
-
-function buildNetBankingForm() {
-  const banks = ["State Bank of India","HDFC Bank","ICICI Bank","Axis Bank","Kotak Mahindra","Punjab National Bank","Bank of Baroda","Canara Bank"];
-  return `<div class="pay-form">
-    <div class="pay-full"><div class="pay-lbl">SELECT YOUR BANK</div>
-      <select class="pay-inp" id="nb-bank">
-        <option value="">-- Choose your bank --</option>
-        ${banks.map(b => "<option>" + b + "</option>").join("")}
-      </select>
-    </div>
-    <div class="pay-full" style="margin-top:10px"><div class="pay-lbl">NET BANKING USER ID</div><input class="pay-inp" id="nb-user" placeholder="Your bank user ID"></div>
-    <div class="pay-full" style="margin-top:10px"><div class="pay-lbl">PASSWORD</div><input class="pay-inp" id="nb-pass" type="password" placeholder="Net banking password"></div>
-    <div class="pay-secure">🔒 You will be redirected to your bank secure portal</div>
-  </div>`;
-}
-
-function buildCODForm() {
-  return `<div class="pay-form" style="text-align:center;padding:28px">
-    <div style="font-size:2.5rem;margin-bottom:12px">💵</div>
-    <div style="font-family:var(--fd);font-size:1.4rem;letter-spacing:.04em;margin-bottom:8px">PAY AT SHOWROOM</div>
-    <p style="font-size:.85rem;color:var(--text3);line-height:1.7;margin-bottom:14px">Pay cash or card when you arrive at the APEX showroom. Your booking will be confirmed once admin approves your ID.</p>
-    <div style="background:var(--gold-xs);border:1px solid rgba(201,168,76,.2);padding:12px;font-family:var(--fm);font-size:.65rem;color:var(--text3)">
-      Amount Due at Pickup: <span style="color:var(--gold);font-size:.85rem">Rs.${(window._pendingTotal||0).toLocaleString()}</span>
-    </div>
-  </div>`;
-}
-
-// ── Process Payment ──────────────────────────────────────────────────────
-window.processPayment = async () => {
-  const btn = document.getElementById("cfm-btn");
-  btn.disabled = true;
-  btn.textContent = selPayMethod === "cod" ? "Confirming..." : "Processing Payment...";
-
-  // Validate payment fields
-  if (selPayMethod === "card") {
-    const num = document.getElementById("card-num")?.value.replace(/\s/g,"");
-    const exp = document.getElementById("card-exp")?.value;
-    const cvv = document.getElementById("card-cvv")?.value;
-    if (!num || num.length < 16) { toast("Enter a valid 16-digit card number","e"); btn.disabled=false; btn.textContent="PAY Rs."+(window._pendingTotal||0).toLocaleString()+" ✓"; return; }
-    if (!exp || exp.length < 5) { toast("Enter a valid expiry date","e"); btn.disabled=false; btn.textContent="PAY Rs."+(window._pendingTotal||0).toLocaleString()+" ✓"; return; }
-    if (!cvv || cvv.length < 3) { toast("Enter a valid CVV","e"); btn.disabled=false; btn.textContent="PAY Rs."+(window._pendingTotal||0).toLocaleString()+" ✓"; return; }
-  } else if (selPayMethod === "upi") {
-    const upiId = document.getElementById("upi-id")?.value;
-    const upiApp = document.querySelector(".upi-app.on");
-    if (!upiId && !upiApp) { toast("Select UPI app or enter UPI ID","e"); btn.disabled=false; return; }
-  } else if (selPayMethod === "netbanking") {
-    const bank = document.getElementById("nb-bank")?.value;
-    if (!bank) { toast("Please select your bank","e"); btn.disabled=false; return; }
-  }
-
-  // Simulate payment processing (1.5 sec delay)
-  await new Promise(r => setTimeout(r, 1500));
-
-  // Now confirm the booking
-  if (!Auth.token()) { closeModal(); showPage("auth","login"); return toast("Please log in first","e"); }
-  const cust = window._pendingCust, days = window._pendingDays, total = window._pendingTotal;
-
-  try {
-    const bdata = await api("POST", "/bookings", {
-      vehicleId:    selV.id,
-      bookingType:  bookType === "testdrive" ? "TESTDRIVE" : "RENTAL",
-      bookingDate:  selDate,
-      timeSlot:     bookType === "testdrive" ? selSlot : null,
-      rentalDays:   bookType === "rental" ? days : null,
-      customerName: cust.name, customerPhone: cust.phone,
-      licenseUrl:   uploadURL || ""
-    });
-    const ref = bdata.bookingRef || ("BK" + Date.now().toString(36).toUpperCase());
-    const payMethodLabels = { card:"Card Payment", upi:"UPI Payment", netbanking:"Net Banking", cod:"Pay at Showroom" };
-    const saved = {
-      id: ref, bookingId: ref,
-      vehicleId: selV.id, vehicleName: selV.make + " " + selV.model,
-      bookingType: bookType, date: selDate,
-      slot: bookType === "testdrive" ? selSlot : null,
-      rentalDays: bookType === "rental" ? days : null,
-      total: bdata.totalPrice || total,
-      status: "pending",
-      paymentMethod: payMethodLabels[selPayMethod] || selPayMethod,
-      paymentStatus: selPayMethod === "cod" ? "Pay at Showroom" : "Paid",
-      userEmail: currentUser.email, userId: currentUser.uid,
-      createdAt: new Date().toISOString()
-    };
-    try {
-      const ex = JSON.parse(localStorage.getItem("apex_bookings") || "[]");
-      ex.unshift(saved);
-      localStorage.setItem("apex_bookings", JSON.stringify(ex));
-    } catch {}
-    if (prefs.autoReminder) {
-      reminders.push({ id:"r"+Date.now(), title: selV.make+" "+selV.model+" Booking",
-        desc:"Your "+(bookType==="testdrive"?"test drive":"rental")+" on "+selDate+(selSlot?" at "+selSlot:""),
-        time:selDate, icon:"reminder", dismissed:false });
-      localStorage.setItem("apex_reminders", JSON.stringify(reminders));
-    }
-    showPaymentSuccess(ref, saved);
-  } catch (e) {
-    toast(e.message || "Booking failed. Please try again.", "e");
-    btn.disabled = false;
-    btn.textContent = selPayMethod === "cod" ? "CONFIRM BOOKING ✓" : "PAY Rs."+(total||0).toLocaleString()+" ✓";
-  }
-};
-
-function showPaymentSuccess(id, b) {
-  const payIcon = { card:"💳", upi:"📱", netbanking:"🏦", cod:"💵" };
-  document.getElementById("modal-content").innerHTML = `
-    <div class="success-wrap">
-      <div class="pay-success">
-        <span class="pay-tick">${b.paymentStatus === "Paid" ? "✅" : "📋"}</span>
-        <div style="font-family:var(--fd);font-size:2rem;letter-spacing:.04em;margin-bottom:6px">
-          ${b.paymentStatus === "Paid" ? "PAYMENT SUCCESSFUL!" : "BOOKING CONFIRMED!"}
-        </div>
-        <div style="font-size:.85rem;color:var(--text3);margin-bottom:18px">
-          ${b.paymentStatus === "Paid" ? "Your payment has been processed" : "Pay at the showroom on arrival"}
-        </div>
-        <div class="bid-box">
-          <div class="bid-lbl">BOOKING ID</div>
-          <div class="bid-val">${id}</div>
-          <div class="bid-copy" onclick="navigator.clipboard.writeText('${id}');toast('Copied!','s')">📋 Copy to clipboard</div>
-        </div>
-        <div class="succ-details" style="margin-top:14px">
-          <div class="sd">🚗 ${b.vehicleName}</div>
-          <div class="sd">📅 ${b.date}${b.slot?" @ "+b.slot:""}</div>
-          <div class="sd">${payIcon[selPayMethod]||"💳"} ${b.paymentMethod} — Rs.${b.total.toLocaleString()}</div>
-          <div class="sd" style="color:var(--amber)">⏳ PENDING ADMIN APPROVAL</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;padding:0 26px 22px">
-        <button class="btn-p" style="flex:1" onclick="closeModal()">DONE</button>
-        <button class="btn-s" style="flex:1" onclick="closeModal();showPage('settings','orderhistory')">ORDER HISTORY</button>
-      </div>
-    </div>`;
-}
-
-// ══ PAYMENT SETTINGS PANEL ═══════════════════════════════════════════════
-function buildPaymentPanel() {
-  return `
-    <div class="st-section-title">PAYMENT METHODS</div>
-    <p class="st-section-sub">Manage your saved payment options</p>
-    <div class="st-group">
-      <div class="st-group-title">SAVED CARDS</div>
-      <div style="background:var(--bg3);border:1px solid var(--border2);padding:18px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:14px">
-          <span style="font-size:1.8rem">💳</span>
-          <div>
-            <div style="font-family:var(--fm);font-size:.7rem;letter-spacing:.1em">VISA •••• •••• •••• 4242</div>
-            <div style="font-size:.75rem;color:var(--text3);margin-top:2px">Expires 12/27 · Default card</div>
-          </div>
-        </div>
-        <span style="font-family:var(--fm);font-size:.55rem;color:var(--green);background:rgba(74,222,128,.1);padding:3px 8px;border:1px solid rgba(74,222,128,.25)">DEFAULT</span>
-      </div>
-      <button class="btn-s" style="font-size:.62rem;padding:9px 18px" onclick="toast('Card management coming soon','i')">+ ADD NEW CARD</button>
-    </div>
-    <div class="st-group">
-      <div class="st-group-title">UPI IDS</div>
-      <div style="background:var(--bg3);border:1px solid var(--border2);padding:14px 18px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
-        <div style="font-family:var(--fm);font-size:.7rem">yourname@oksbi</div>
-        <button class="btn-s" style="font-size:.55rem;padding:5px 12px" onclick="toast('UPI removed','s')">REMOVE</button>
-      </div>
-      <button class="btn-s" style="font-size:.62rem;padding:9px 18px" onclick="toast('UPI management coming soon','i')">+ ADD UPI ID</button>
-    </div>
-    <div class="st-group">
-      <div class="st-group-title">PAYMENT HISTORY SUMMARY</div>
-      <div class="st-row"><div class="st-row-left"><div class="st-row-label">TOTAL SPENT</div><div class="st-row-desc">All completed bookings</div></div><strong style="color:var(--gold);font-family:var(--fd);font-size:1.2rem" id="pay-total-spent">Loading...</strong></div>
-      <div class="st-row"><div class="st-row-left"><div class="st-row-label">TOTAL BOOKINGS</div><div class="st-row-desc">All time</div></div><strong style="color:var(--gold);font-family:var(--fd);font-size:1.2rem" id="pay-total-bk">Loading...</strong></div>
-    </div>`;
-  // Load payment stats
-  setTimeout(async () => {
-    const bks = await loadMyBookingsFromAPI();
-    const spent = bks.filter(b=>b.status==="approved"||b.status==="completed").reduce((s,b)=>s+(b.total||0),0);
-    const el1 = document.getElementById("pay-total-spent");
-    const el2 = document.getElementById("pay-total-bk");
-    if(el1) el1.textContent = "Rs." + spent.toLocaleString();
-    if(el2) el2.textContent = bks.length;
-  }, 200);
-}
-
-// ══ ORDER HISTORY PANEL ═══════════════════════════════════════════════════
-function buildOrderHistoryPanel() {
-  return `
-    <div class="st-section-title">ORDER HISTORY</div>
-    <p class="st-section-sub">All your bookings and reservations in one place</p>
-    <div class="oh-stats">
-      <div class="oh-stat"><div class="oh-stat-num" id="ohs-total">-</div><div class="oh-stat-lbl">TOTAL ORDERS</div></div>
-      <div class="oh-stat"><div class="oh-stat-num" id="ohs-pending" style="color:var(--amber)">-</div><div class="oh-stat-lbl">PENDING</div></div>
-      <div class="oh-stat"><div class="oh-stat-num" id="ohs-approved" style="color:var(--green)">-</div><div class="oh-stat-lbl">APPROVED</div></div>
-      <div class="oh-stat"><div class="oh-stat-num" id="ohs-spent" style="color:var(--gold)">-</div><div class="oh-stat-lbl">TOTAL SPENT</div></div>
-    </div>
-    <div class="oh-filters">
-      <span style="font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(--text3);align-self:center">FILTER:</span>
-      <button class="fb on" onclick="filterOrders('all',this)">ALL</button>
-      <button class="fb" onclick="filterOrders('pending',this)">PENDING</button>
-      <button class="fb" onclick="filterOrders('approved',this)">APPROVED</button>
-      <button class="fb" onclick="filterOrders('rejected',this)">REJECTED</button>
-      <button class="fb" onclick="filterOrders('completed',this)">COMPLETED</button>
-      <button class="btn-s" style="font-size:.6rem;padding:6px 14px;margin-left:auto" onclick="loadOrderHistory();toast('Refreshed','s')">Refresh</button>
-    </div>
-    <div id="order-history-list">
-      <div class="oh-empty">Loading your orders...</div>
-    </div>`;
-}
-
-async function loadOrderHistory() {
-  const container = document.getElementById("order-history-list");
-  if (!container) return;
-  const bks = await loadMyBookingsFromAPI();
-  const lsBks = loadMyBookings();
-  const apiIds = new Set(bks.map(b=>b.id));
-  const all = [...bks, ...lsBks.filter(b=>!apiIds.has(b.id))];
-
-  // Update stats
-  const s = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
-  s("ohs-total", all.length);
-  s("ohs-pending", all.filter(b=>b.status==="pending").length);
-  s("ohs-approved", all.filter(b=>b.status==="approved").length);
-  const spent = all.filter(b=>b.status==="approved"||b.status==="completed").reduce((sum,b)=>sum+(b.total||0),0);
-  s("ohs-spent", "Rs." + (spent/1000).toFixed(1) + "k");
-
-  if (!all.length) {
-    container.innerHTML = `<div class="oh-empty">No orders yet. <span style="color:var(--gold);cursor:pointer" onclick="showPage('vehicles')">Browse fleet</span></div>`;
-    return;
-  }
-  container.innerHTML = all.map(b => `
-    <div class="oh-card" data-status="${b.status}">
-      <div class="oh-head">
-        <div>
-          <div class="oh-ref">${b.id||b.bookingId}</div>
-          <div style="font-size:.75rem;color:var(--text3);margin-top:2px;font-family:var(--fm)">${b.createdAt?new Date(b.createdAt).toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}):"--"}</div>
-        </div>
-        <span class="oh-status ${b.status}">${(b.status||"PENDING").toUpperCase()}</span>
-      </div>
-      <div class="oh-body">
-        <div class="oh-field"><label>VEHICLE</label><span>${b.vehicleName||"--"}</span></div>
-        <div class="oh-field"><label>TYPE</label><span>${b.bookingType==="testdrive"?"Test Drive":"Rental"}</span></div>
-        <div class="oh-field"><label>DATE</label><span>${b.date||"--"}${b.slot?" @ "+b.slot:""}</span></div>
-        ${b.rentalDays?`<div class="oh-field"><label>DURATION</label><span>${b.rentalDays} day(s)</span></div>`:""}
-        <div class="oh-field"><label>PAYMENT</label><span>${b.paymentMethod||"--"}</span></div>
-        <div class="oh-field"><label>PAYMENT STATUS</label><span style="color:${b.paymentStatus==='Paid'?'var(--green)':'var(--amber)'}">${b.paymentStatus||"Pending"}</span></div>
-      </div>
-      <div class="oh-foot">
-        <div class="oh-total">Rs.${(b.total||0).toLocaleString()}</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          ${b.paymentStatus==="Paid"?`<span class="oh-pay-badge">PAID</span>`:`<span style="font-family:var(--fm);font-size:.52rem;color:var(--amber)">UNPAID</span>`}
-          ${b.status==="pending"?`<button class="btn-s" style="font-size:.55rem;padding:5px 12px" onclick="toast('Contact admin to cancel booking '+('${b.id||b.bookingId}'),'i')">CANCEL</button>`:""}
-        </div>
-      </div>
-    </div>`).join("");
-}
-
-window.filterOrders = (status, el) => {
-  document.querySelectorAll(".oh-card").forEach(c => {
-    c.style.display = (status === "all" || c.dataset.status === status) ? "block" : "none";
-  });
-  document.querySelectorAll(".oh-filters .fb").forEach(b => b.classList.remove("on"));
-  if (el) el.classList.add("on");
-};
-
 
 function showSuccess(id,b){
   document.getElementById("modal-content").innerHTML=`
@@ -2988,18 +2599,58 @@ window.renderAbout=()=>{
         <div class="val-card"><div class="val-icon">⚡</div><div class="val-title">SEAMLESS EXPERIENCE</div><p class="val-desc">From online booking to key handover — every touchpoint is designed to be effortless, fast and worthy of the vehicles we represent.</p></div>
       </div>
     </div>
-<!-- HOW IT WORKS -->
-  <section class="section" id="how-it-works" style="background:var(--bg2)">
-    <div class="sec-eye">THE PROCESS</div>
-    <div class="sec-title">HOW IT <span style="color:var(--gold)">WORKS</span></div>
-    <p class="sec-sub">Four steps to your premium driving experience</p>
-    <div class="steps-grid">
-      <div class="step-card"><div class="step-num">01</div><div class="step-icon">🔐</div><div class="step-title">CREATE ACCOUNT</div><p class="step-desc">Sign up in seconds. Secure Firebase authentication protects your data.</p></div>
-      <div class="step-card"><div class="step-num">02</div><div class="step-icon">🚗</div><div class="step-title">CHOOSE VEHICLE</div><p class="step-desc">Browse 30+ luxury cars and premium motorcycles. Filter, search, and compare.</p></div>
-      <div class="step-card"><div class="step-num">03</div><div class="step-icon">📅</div><div class="step-title">PICK DATE & SLOT</div><p class="step-desc">Dynamic calendar shows real availability. Choose test drive or rental duration.</p></div>
-      <div class="step-card"><div class="step-num">04</div><div class="step-icon">✦</div><div class="step-title">CONFIRM & DRIVE</div><p class="step-desc">Upload your ID. Admin verifies it and approves. Unique booking ID generated instantly.</p></div>
+
+    <!-- TEAM -->
+    <div class="section" style="background:var(--bg2)">
+      <div class="sec-eye">THE PEOPLE BEHIND APEX</div>
+      <div class="sec-title">MEET THE <span style="color:var(--gold)">TEAM</span></div>
+      <p class="sec-sub">Passionate car and bike enthusiasts who turned their obsession into India's finest drive experience</p>
+      <div class="team-grid">
+        <div class="team-card">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80" alt="Aditya Menon" loading="lazy">
+          <div class="team-overlay">
+            <div class="team-name">Aditya Menon</div>
+            <div class="team-role">FOUNDER & CEO · CHENNAI</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80" alt="Kavitha Rajan" loading="lazy">
+          <div class="team-overlay">
+            <div class="team-name">Kavitha Rajan</div>
+            <div class="team-role">COO & OPERATIONS HEAD</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80" alt="Rohan Sharma" loading="lazy">
+          <div class="team-overlay">
+            <div class="team-name">Rohan Sharma</div>
+            <div class="team-role">FLEET DIRECTOR · BANGALORE</div>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
+
+    <!-- TIMELINE -->
+    <div class="section" style="background:var(--bg)">
+      <div class="sec-eye">OUR JOURNEY</div>
+      <div class="sec-title">THE APEX <span style="color:var(--gold)">TIMELINE</span></div>
+      <p class="sec-sub">Five years of building India's premium drive experience platform</p>
+      <div style="position:relative;padding-left:32px;border-left:1px solid rgba(201,168,76,.3)">
+        ${[
+          {year:"2019",event:"Founded in Chennai with 3 vehicles — one BMW, one Range Rover, one Triumph"},
+          {year:"2020",event:"Survived the pandemic by launching an online reservation system — a full year before competitors"},
+          {year:"2021",event:"Expanded to Bangalore. Crossed 500 verified customers. Added Harley-Davidson to the fleet"},
+          {year:"2022",event:"Launched motorcycle-exclusive showroom in Mumbai. Added Maybach and Lamborghini to select locations"},
+          {year:"2023",event:"Reached 9 showrooms across India. Launched home delivery for weekly rentals. 4.8★ average rating"},
+          {year:"2024",event:"Launched this digital reservation platform — APEX CRS — bringing seamless online bookings to all 9 locations"},
+        ].map(t=>`
+          <div style="position:relative;margin-bottom:32px;padding-left:20px">
+            <div style="position:absolute;left:-37px;top:4px;width:10px;height:10px;background:var(--gold);border-radius:50%;border:2px solid var(--bg)"></div>
+            <div style="font-family:var(--fd);font-size:1.4rem;color:var(--gold);letter-spacing:.06em">${t.year}</div>
+            <p style="font-size:.95rem;color:var(--text2);line-height:1.7;margin-top:4px">${t.event}</p>
+          </div>`).join("")}
+      </div>
+    </div>
 
     <!-- CTA -->
     <div style="background:var(--bg2);border-top:1px solid var(--border2);padding:80px;text-align:center">
