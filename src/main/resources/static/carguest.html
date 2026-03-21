@@ -311,7 +311,7 @@ nav{
 /* ══ BOOKING MODAL ════════════════════════════════════════════════════════ */
 #modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
 #modal-overlay.open{display:flex}
-.modal-box{background:var(--modal-bg);border:1px solid rgba(201,168,76,.25);width:100%;max-width:660px;margin:auto;position:relative}
+.modal-box{background:var(--modal-bg);border:1px solid rgba(201,168,76,.25);width:100%;max-width:550px;margin:auto;position:relative}
 .modal-x{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text3);font-size:1.1rem;z-index:10;width:30px;height:30px;display:flex;align-items:center;justify-content:center;transition:color .2s}
 .modal-x:hover{color:var(--gold)}
 .modal-head{padding:22px 26px 18px;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center}
@@ -645,7 +645,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80
     <span class="nav-link" onclick="showPage('about')">ABOUT</span>
     <span class="nav-link" onclick="showPage('locations')">LOCATIONS</span>
     <span class="nav-link" onclick="showPage('reviews')">REVIEWS</span>
-    <span class="nav-link" onclick="scrollSec('how-it-works')">HOW IT WORKS</span>
+   
   </div>
   <div class="nav-actions">
     <div id="nav-guest" style="display:flex;gap:8px">
@@ -670,7 +670,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80
   <span class="mobile-link" onclick="showPage('about');closeMobile()">ABOUT US</span>
   <span class="mobile-link" onclick="showPage('locations');closeMobile()">LOCATIONS & MAP</span>
   <span class="mobile-link" onclick="showPage('reviews');closeMobile()">REVIEWS</span>
-  <span class="mobile-link" onclick="scrollSec('how-it-works');closeMobile()">HOW IT WORKS</span>
   <span class="mobile-link" onclick="showPage('auth','login');closeMobile()">LOGIN</span>
   <span class="mobile-link" onclick="showPage('auth','signup');closeMobile()">BOOK NOW</span>
   <span class="mobile-link" id="mob-settings" style="display:none" onclick="showPage('settings','profile');closeMobile()">⚙ SETTINGS</span>
@@ -718,20 +717,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:52px 80
       <button class="btn-p" style="padding:13px 44px;font-size:.72rem;letter-spacing:.16em" onclick="showPage('vehicles')">VIEW ALL 30+ VEHICLES →</button>
     </div>
   </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="section" id="how-it-works" style="background:var(--bg2)">
-    <div class="sec-eye">THE PROCESS</div>
-    <div class="sec-title">HOW IT <span style="color:var(--gold)">WORKS</span></div>
-    <p class="sec-sub">Four steps to your premium driving experience</p>
-    <div class="steps-grid">
-      <div class="step-card"><div class="step-num">01</div><div class="step-icon">🔐</div><div class="step-title">CREATE ACCOUNT</div><p class="step-desc">Sign up in seconds. Secure Firebase authentication protects your data.</p></div>
-      <div class="step-card"><div class="step-num">02</div><div class="step-icon">🚗</div><div class="step-title">CHOOSE VEHICLE</div><p class="step-desc">Browse 30+ luxury cars and premium motorcycles. Filter, search, and compare.</p></div>
-      <div class="step-card"><div class="step-num">03</div><div class="step-icon">📅</div><div class="step-title">PICK DATE & SLOT</div><p class="step-desc">Dynamic calendar shows real availability. Choose test drive or rental duration.</p></div>
-      <div class="step-card"><div class="step-num">04</div><div class="step-icon">✦</div><div class="step-title">CONFIRM & DRIVE</div><p class="step-desc">Upload your ID. Admin verifies it and approves. Unique booking ID generated instantly.</p></div>
-    </div>
-  </section>
-
   <!-- FOOTER -->
   <footer>
     <div class="footer-grid">
@@ -2942,59 +2927,18 @@ window.renderAbout=()=>{
         <div class="val-card"><div class="val-icon">⚡</div><div class="val-title">SEAMLESS EXPERIENCE</div><p class="val-desc">From online booking to key handover — every touchpoint is designed to be effortless, fast and worthy of the vehicles we represent.</p></div>
       </div>
     </div>
-
-    <!-- TEAM -->
-    <div class="section" style="background:var(--bg2)">
-      <div class="sec-eye">THE PEOPLE BEHIND APEX</div>
-      <div class="sec-title">MEET THE <span style="color:var(--gold)">TEAM</span></div>
-      <p class="sec-sub">Passionate car and bike enthusiasts who turned their obsession into India's finest drive experience</p>
-      <div class="team-grid">
-        <div class="team-card">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80" alt="Aditya Menon" loading="lazy">
-          <div class="team-overlay">
-            <div class="team-name">Aditya Menon</div>
-            <div class="team-role">FOUNDER & CEO · CHENNAI</div>
-          </div>
-        </div>
-        <div class="team-card">
-          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80" alt="Kavitha Rajan" loading="lazy">
-          <div class="team-overlay">
-            <div class="team-name">Kavitha Rajan</div>
-            <div class="team-role">COO & OPERATIONS HEAD</div>
-          </div>
-        </div>
-        <div class="team-card">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80" alt="Rohan Sharma" loading="lazy">
-          <div class="team-overlay">
-            <div class="team-name">Rohan Sharma</div>
-            <div class="team-role">FLEET DIRECTOR · BANGALORE</div>
-          </div>
-        </div>
-      </div>
+ <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works" style="background:var(--bg2)">
+    <div class="sec-eye">THE PROCESS</div>
+    <div class="sec-title">HOW IT <span style="color:var(--gold)">WORKS</span></div>
+    <p class="sec-sub">Four steps to your premium driving experience</p>
+    <div class="steps-grid">
+      <div class="step-card"><div class="step-num">01</div><div class="step-icon">🔐</div><div class="step-title">CREATE ACCOUNT</div><p class="step-desc">Sign up in seconds. Secure Firebase authentication protects your data.</p></div>
+      <div class="step-card"><div class="step-num">02</div><div class="step-icon">🚗</div><div class="step-title">CHOOSE VEHICLE</div><p class="step-desc">Browse 30+ luxury cars and premium motorcycles. Filter, search, and compare.</p></div>
+      <div class="step-card"><div class="step-num">03</div><div class="step-icon">📅</div><div class="step-title">PICK DATE & SLOT</div><p class="step-desc">Dynamic calendar shows real availability. Choose test drive or rental duration.</p></div>
+      <div class="step-card"><div class="step-num">04</div><div class="step-icon">✦</div><div class="step-title">CONFIRM & DRIVE</div><p class="step-desc">Upload your ID. Admin verifies it and approves. Unique booking ID generated instantly.</p></div>
     </div>
-
-    <!-- TIMELINE -->
-    <div class="section" style="background:var(--bg)">
-      <div class="sec-eye">OUR JOURNEY</div>
-      <div class="sec-title">THE APEX <span style="color:var(--gold)">TIMELINE</span></div>
-      <p class="sec-sub">Five years of building India's premium drive experience platform</p>
-      <div style="position:relative;padding-left:32px;border-left:1px solid rgba(201,168,76,.3)">
-        ${[
-          {year:"2019",event:"Founded in Chennai with 3 vehicles — one BMW, one Range Rover, one Triumph"},
-          {year:"2020",event:"Survived the pandemic by launching an online reservation system — a full year before competitors"},
-          {year:"2021",event:"Expanded to Bangalore. Crossed 500 verified customers. Added Harley-Davidson to the fleet"},
-          {year:"2022",event:"Launched motorcycle-exclusive showroom in Mumbai. Added Maybach and Lamborghini to select locations"},
-          {year:"2023",event:"Reached 9 showrooms across India. Launched home delivery for weekly rentals. 4.8★ average rating"},
-          {year:"2024",event:"Launched this digital reservation platform — APEX CRS — bringing seamless online bookings to all 9 locations"},
-        ].map(t=>`
-          <div style="position:relative;margin-bottom:32px;padding-left:20px">
-            <div style="position:absolute;left:-37px;top:4px;width:10px;height:10px;background:var(--gold);border-radius:50%;border:2px solid var(--bg)"></div>
-            <div style="font-family:var(--fd);font-size:1.4rem;color:var(--gold);letter-spacing:.06em">${t.year}</div>
-            <p style="font-size:.95rem;color:var(--text2);line-height:1.7;margin-top:4px">${t.event}</p>
-          </div>`).join("")}
-      </div>
-    </div>
-
+  </section>
     <!-- CTA -->
     <div style="background:var(--bg2);border-top:1px solid var(--border2);padding:80px;text-align:center">
       <div style="font-family:var(--fm);font-size:.6rem;letter-spacing:.4em;color:var(--gold);margin-bottom:12px">READY TO EXPERIENCE IT?</div>
